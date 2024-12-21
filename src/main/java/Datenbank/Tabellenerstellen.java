@@ -78,8 +78,7 @@ public class Tabellenerstellen {
     }
 
     public static void main(String[] args) {
-        //dropTableall();
+        // dropTableall();
         createTableall();
-
     }
 }
