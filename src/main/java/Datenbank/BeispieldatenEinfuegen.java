@@ -1,8 +1,10 @@
 package Datenbank;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.List;
 
 public class BeispieldatenEinfuegen {
 
@@ -28,24 +30,30 @@ public class BeispieldatenEinfuegen {
         }
     }
 
-    public static void insertTableFahrzeug(){
-        try{
-            Connection conn = Datenbankverbindung.connect();
-            String query = "INSERT INTO Fahrzeug (Kennzeichen, Modell, Hersteller, Motorleistung)" +
-                    "VALUES" +
-                    "('KA-DL-5874', 'Twingo', 'Renault', 75)," +
-                    "('KA-FG-1531', 'Tiguan', 'VW', 100)," +
-                    "('RA-LM-4563', 'Polo', 'VW', 80)," +
-                    "('RA-FD-4213', 'UP', 'VW', 60)," +
-                    "('A-GF-2131', 'Corsa', 'Opel', 65)," +
-                    "('A-AL-4531', 'Twingo', 'Renault', 75)," +
-                    "('GAP-X-435', 'Tiguan', 'VW', 110)," +
-                    "('GAP-U-124', 'Tiguan', 'VW', 105)," +
-                    "('GAP-F-5727', 'Astra', 'Opel', 90)," +
-                    "('GAP-FF-435', 'Twingo', 'Renault', 80)";
-            Statement stmt = conn.createStatement();
-            stmt.executeUpdate(query);
-        } catch(SQLException e){
+    public static void insertTableFahrzeug(List<ElementFahrzeug> fahrzeuge){
+        // TODO: umstellen auf Einlesen aus Datei mit SELECT-Statement davor.
+        String sql = "INSERT INTO Fahrzeug VALUES(?,?,?,?)";
+        final int batchSize = 5;
+        int count = 0;
+        try(
+                Connection conn = Datenbankverbindung.connect();
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+        ){
+            for(ElementFahrzeug ElementFahrzeug: fahrzeuge){
+                pstmt.setString(1, ElementFahrzeug.getKennzeichen());
+                pstmt.setString(2, ElementFahrzeug.getModell());
+                pstmt.setString(3, ElementFahrzeug.getHersteller());
+                pstmt.setInt(4, ElementFahrzeug.getMotorleistung());
+
+                pstmt.addBatch();
+                if(++count % batchSize == 0){
+                    pstmt.executeBatch();
+                }
+            }
+            pstmt.executeBatch();
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -84,7 +92,8 @@ public class BeispieldatenEinfuegen {
 
     public static void fillTableall(){
         insertTableVerstoss();
-        insertTableFahrzeug();
+        List<ElementFahrzeug> fahrzeuge = DatenDateiLesen.readFahrezuge();
+        insertTableFahrzeug(fahrzeuge);
         insertTableBussgeld();
     }
 
@@ -109,8 +118,8 @@ public class BeispieldatenEinfuegen {
 
 
     public static void main(String[] args) {
-        // makeAllNew();
+        makeAllNew();
         // deleteTableall();
-        fillTableall();
+        //fillTableall();
     }
 }
