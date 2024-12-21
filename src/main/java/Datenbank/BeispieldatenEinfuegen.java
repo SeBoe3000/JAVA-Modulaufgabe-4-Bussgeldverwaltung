@@ -55,7 +55,7 @@ public class BeispieldatenEinfuegen {
             Connection conn = Datenbankverbindung.connect();
             String query = "INSERT INTO Bussgeld (Tageszeit, VerstossID, Fahrzeug)" +
                     "VALUES" +
-                    "('2024-01-20 11:05:15', 1, 'KA-DL-5874')," +
+                    "('2024-12-20 11:05:15', 1, 'KA-DL-5874')," +
                     "('2023-12-04 16:54:45', 2, 'RA-FD-4213')," +
                     "('2024-12-20 05:23:27', 5, 'A-GF-2131')," +
                     "('2024-07-09 08:34:48', 3, 'KA-FG-1531')," +
