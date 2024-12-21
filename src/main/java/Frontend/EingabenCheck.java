@@ -92,7 +92,7 @@ public class EingabenCheck {
     - Prüfung auf Minuten nicht größer 59
     - TODO: Prüfung auf Datum (+ Uhrzeit) nicht in der Zukunft
     */
-    public static boolean isValidKennzeichen(String eingabe){
+    public static boolean isValidDatum(String eingabe){
         boolean isValid = true;
         Integer Tag = 0;
         Integer Monat = 0;
