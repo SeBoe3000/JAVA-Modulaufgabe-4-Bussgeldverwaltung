@@ -90,6 +90,7 @@ public class EingabenCheck {
     - Prüfung auf Tage nicht größer 28 bei Monat 02 und keinem Schaltjahr
     - Prüfung auf Stunden nicht größer 23
     - Prüfung auf Minuten nicht größer 59
+    - Prüfung auf Sekunden nicht größer 59
     - TODO: Prüfung auf Datum (+ Uhrzeit) nicht in der Zukunft
     */
     public static boolean isValidDatum(String eingabe){
@@ -99,6 +100,7 @@ public class EingabenCheck {
         Integer Jahr = 0;
         Integer Stunden = 0;
         Integer Minuten = 0;
+        Integer Sekunden = 0;
 
         // in die einzelnen Bestandteile zerlegen
 
@@ -108,7 +110,8 @@ public class EingabenCheck {
                 (Monat == 2 && Tag > 29) ||
                 (Monat == 2 && Tag > 28 && !((Jahr % 4 == 0 && Jahr % 100 != 0) || Jahr % 400 == 0)) ||
                 (Stunden > 23) ||
-                (Minuten > 59)
+                (Minuten > 59) ||
+                (Sekunden > 59)
         ) {
             isValid = false;
         }
