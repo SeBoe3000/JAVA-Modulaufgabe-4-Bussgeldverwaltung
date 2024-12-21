@@ -44,7 +44,7 @@ public class Tabellenerstellen {
             Connection conn = Datenbankverbindung.connect();
             String query = "CREATE TABLE IF NOT EXISTS Bussgeld" +
                     "(ID serial NOT NULL," +
-                    "Tageszeit date NOT NULL," +
+                    "Tageszeit timestamp NOT NULL," +
                     "VerstossID integer NOT NULL," +
                     "Fahrzeug varchar(10) NOT NULL," +
                     "PRIMARY KEY(ID)," +
@@ -78,7 +78,8 @@ public class Tabellenerstellen {
     }
 
     public static void main(String[] args) {
-        createTableall();
         //dropTableall();
+        createTableall();
+
     }
 }
