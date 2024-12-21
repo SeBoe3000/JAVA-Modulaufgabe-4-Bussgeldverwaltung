@@ -15,7 +15,7 @@ public class Tabellenerstellen {
                     "Strafe real NOT NULL," +
                     "Punkte integer NULL," +
                     "Fahrverbot integer NULL," +
-                    "PRIMARY KEY(Verstoss-ID))";
+                    "PRIMARY KEY(VerstossID))";
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(query);
         } catch(SQLException e){
@@ -48,7 +48,7 @@ public class Tabellenerstellen {
                     "VerstossID integer NOT NULL," +
                     "Fahrzeug varchar(8) NOT NULL," +
                     "PRIMARY KEY(ID)," +
-                    "UNIQUE(Tageszeit, Verstoss-ID, Fahrzeug)," +
+                    "UNIQUE(Tageszeit, VerstossID, Fahrzeug)," +
                     "CONSTRAINT fk_Verstoss FOREIGN KEY (VerstossID) REFERENCES Verstoss (VerstossID)," +
                     "CONSTRAINT fk_Fahrzeug FOREIGN KEY (Fahrzeug) REFERENCES Fahrzeug (Kennzeichen))";
             Statement stmt = conn.createStatement();
