@@ -134,4 +134,18 @@ public class EingabenCheck {
         return isValid;
     }
 
+    // Überprüfung auf maximale Länge
+    public static boolean isValidStringLaenge(String eingabe, Integer laenge){
+        boolean isValid = true;
+        Integer anzahlZahl = 0;
+
+        for(int i = 0; i < eingabe.length(); i++){
+            anzahlZahl ++;
+        }
+        if (anzahlZahl > laenge){
+            isValid = false;
+        }
+        return isValid;
+    }
+
 }
