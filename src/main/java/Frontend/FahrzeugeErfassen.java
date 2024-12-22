@@ -2,6 +2,8 @@ package Frontend;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class FahrzeugeErfassen {
     private static final JFrame fahrzeuge = new JFrame("Fahrzeuge erfassen");
@@ -61,7 +63,6 @@ public class FahrzeugeErfassen {
         gbc.gridy = 4; // Spalte
         panel.add(transaction_panel, gbc);
 
-
         // Panel dem Frame hinzufügen
         fahrzeuge.add(panel);
 
@@ -76,9 +77,20 @@ public class FahrzeugeErfassen {
         fahrzeuge.setVisible(true);
     }
 
-
     private void buttonListenerfahrzeuge() {
         // TODO: ButtonListener implementieren
+        ActionListener abbrechen = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                backToStart();
+            }
+        };cancel_btn.addActionListener(abbrechen);
+    }
+
+    private void backToStart(){
+        BussgelderGUI calc = new BussgelderGUI();
+        calc.main();
+        fahrzeuge.setVisible(false);
     }
 
     public void main(){

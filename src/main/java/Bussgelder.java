@@ -1,7 +1,8 @@
 import Datenbank.BeispieldatenEinfuegen;
-import Datenbank.DatenDateiLesen;
 import Datenbank.Tabellenerstellen;
 import Frontend.BussgelderGUI;
+import Frontend.FahrzeugeErfassen;
+import Frontend.VerstossErfassen;
 
 public class Bussgelder {
     public static void main(String[] args) {
@@ -12,5 +13,13 @@ public class Bussgelder {
         // GUI aufrufen
         BussgelderGUI calc = new BussgelderGUI();
         calc.main();
+/*
+        FahrzeugeErfassen fahrzeug = new FahrzeugeErfassen();
+        fahrzeug.main();
+
+        VerstossErfassen verstoss = new VerstossErfassen();
+        verstoss.main();
+*/
+
     }
 }

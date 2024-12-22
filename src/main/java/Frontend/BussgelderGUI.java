@@ -2,14 +2,40 @@ package Frontend;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class BussgelderGUI {
     private static final JFrame start = new JFrame("Bussgelder");
 
+    // Transaktion-Buttons
+    JButton create_fahrzeug = new JButton("Fahrzeug erfassen");
+    JButton create_verstoss = new JButton("Verstoss erfassen");
+    ButtonGroup create_group = new ButtonGroup();
+
     private void start() {
         JPanel panel = new JPanel();
 
+        // GridBagLayout
+        GridBagLayout gridbag = new GridBagLayout();
+        GridBagConstraints gbc = new GridBagConstraints();
+        panel.setLayout(gridbag);
 
+        // Erfassen Buttons hinzufügen
+        gbc.gridx = 0; // Spalte
+        gbc.gridy = 0; // Zeile
+        gbc.weightx = 0.1;
+        gbc.weighty = 0.1;
+        gbc.fill = GridBagConstraints.CENTER;
+
+        create_group.add(create_fahrzeug);
+        create_group.add(create_verstoss);
+
+        JPanel create_group = new JPanel();
+        create_group.setLayout(new BoxLayout(create_group, BoxLayout.X_AXIS));
+        create_group.add(create_fahrzeug);
+        create_group.add(create_verstoss);
+        panel.add(create_group, gbc);
 
         // Panel dem Frame hinzufügen
         start.add(panel);
@@ -25,12 +51,25 @@ public class BussgelderGUI {
         start.setVisible(true);
     }
 
-
-
-
-
     private void buttonListenerstart() {
         // TODO: ButtonListener implementieren
+        ActionListener fahrzeug_erfassen = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FahrzeugeErfassen fahrzeug = new FahrzeugeErfassen();
+                fahrzeug.main();
+                start.setVisible(false);
+            }
+        };create_fahrzeug.addActionListener(fahrzeug_erfassen);
+
+        ActionListener verstoss_erfassen = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VerstossErfassen verstoss = new VerstossErfassen();
+                verstoss.main();
+                start.setVisible(false);
+            }
+        };create_verstoss.addActionListener(verstoss_erfassen);
     }
 
     public void main(){

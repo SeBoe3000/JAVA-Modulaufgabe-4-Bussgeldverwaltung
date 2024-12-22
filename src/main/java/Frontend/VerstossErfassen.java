@@ -2,10 +2,11 @@ package Frontend;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class VerstossErfassen {
     private static final JFrame verstoss = new JFrame("Verstoss erfassen");
-
     // ID
     EingabePanel id = new EingabePanel("ID: ");
     // Tageszeit
@@ -76,9 +77,20 @@ public class VerstossErfassen {
         verstoss.setVisible(true);
     }
 
-
     private void buttonListenerfahrzeuge() {
         // TODO: ButtonListener implementieren
+        ActionListener abbrechen = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                backToStart();
+            }
+        };cancel_btn.addActionListener(abbrechen);
+    }
+
+    private void backToStart(){
+        BussgelderGUI calc = new BussgelderGUI();
+        calc.main();
+        verstoss.setVisible(false);
     }
 
     public void main(){
