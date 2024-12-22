@@ -1,5 +1,7 @@
 package Frontend;
 
+import Datenbank.Abfragen;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,6 +14,11 @@ public class BussgelderGUI {
     JButton create_fahrzeug = new JButton("Fahrzeug erfassen");
     JButton create_verstoss = new JButton("Verstoss erfassen");
     ButtonGroup create_group = new ButtonGroup();
+
+    // Ergebnisse von Abfragen
+    JTextField abfrage1 = new JTextField(Abfragen.abfrageHerstellerMeisteVerstoss());
+    JTextField abfrage2 = new JTextField(Abfragen.abfrageTagMeisteVerstoss());
+    JTextField abfrage3 = new JTextField(Abfragen.abfrageFahrzeugMeisteVerstoss());
 
     private void start() {
         JPanel panel = new JPanel();
@@ -36,6 +43,14 @@ public class BussgelderGUI {
         create_group.add(create_fahrzeug);
         create_group.add(create_verstoss);
         panel.add(create_group, gbc);
+
+        // Abfragen hinzufügen
+        gbc.gridy = 1; // Zeile
+        panel.add(abfrage1, gbc);
+        gbc.gridy = 2; // Zeile
+        panel.add(abfrage2, gbc);
+        gbc.gridy = 3; // Zeile
+        panel.add(abfrage3, gbc);
 
         // Panel dem Frame hinzufügen
         start.add(panel);
