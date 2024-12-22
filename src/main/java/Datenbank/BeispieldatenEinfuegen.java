@@ -1,35 +1,47 @@
 package Datenbank;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 
 public class BeispieldatenEinfuegen {
 
     public static void insertTableVerstoss(List<ElementVerstoss> verstoss){
-        // TODO: umstellen auf Einlesen aus Datei mit SELECT-Statement davor.
-        String sql = "INSERT INTO Verstoss VALUES(?,?,?,?,?)";
+        String sqlSelect = "SELECT count(*) FROM Verstoss WHERE" +
+                " Beschreibung = ? AND Strafe = ? AND Punkte = ? AND Fahrverbot = ?";
+        String sqlInsert = "INSERT INTO Verstoss VALUES(?,?,?,?,?)";
         final int batchSize = 5;
         int count = 0;
         try(
                 Connection conn = Datenbankverbindung.connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql);
+                PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect);
+                PreparedStatement pstmtInsert = conn.prepareStatement(sqlInsert);
         ){
             for(ElementVerstoss ElementVerstoss: verstoss){
-                pstmt.setInt(1, ElementVerstoss.getVerstossID());
-                pstmt.setString(2, ElementVerstoss.getBeschreibung());
-                pstmt.setFloat(3, ElementVerstoss.getStrafe());
-                pstmt.setInt(4, ElementVerstoss.getPunkte());
-                pstmt.setInt(5, ElementVerstoss.getFahrverbot());
-
-                pstmt.addBatch();
-                if(++count % batchSize == 0){
-                    pstmt.executeBatch();
+                // SELECT
+                pstmtSelect.setString(1, ElementVerstoss.getBeschreibung());
+                pstmtSelect.setFloat(2, ElementVerstoss.getStrafe());
+                pstmtSelect.setInt(3, ElementVerstoss.getPunkte());
+                pstmtSelect.setInt(4, ElementVerstoss.getFahrverbot());
+                ResultSet resultSelect = pstmtSelect.executeQuery();
+                int result = 1;
+                while(resultSelect.next()){
+                   result = Integer.parseInt(resultSelect.getString(1));
+                   //System.out.println(result);
+                }
+                if(result == 0) {
+                    // INSERT
+                    pstmtInsert.setInt(1, ElementVerstoss.getVerstossID());
+                    pstmtInsert.setString(2, ElementVerstoss.getBeschreibung());
+                    pstmtInsert.setFloat(3, ElementVerstoss.getStrafe());
+                    pstmtInsert.setInt(4, ElementVerstoss.getPunkte());
+                    pstmtInsert.setInt(5, ElementVerstoss.getFahrverbot());
+                    pstmtInsert.addBatch();
+                    if (++count % batchSize == 0) {
+                        pstmtInsert.executeBatch();
+                    }
                 }
             }
-            pstmt.executeBatch();
+            pstmtInsert.executeBatch();
         } catch (SQLException e){
             e.printStackTrace();
         } catch (Exception e){
@@ -38,26 +50,37 @@ public class BeispieldatenEinfuegen {
     }
 
     public static void insertTableFahrzeug(List<ElementFahrzeug> fahrzeuge){
-        // TODO: umstellen auf Einlesen aus Datei mit SELECT-Statement davor.
-        String sql = "INSERT INTO Fahrzeug VALUES(?,?,?,?)";
+        String sqlSelect = "SELECT count(*) FROM Fahrzeug WHERE Kennzeichen = ?";
+        String sqlInsert = "INSERT INTO Fahrzeug VALUES(?,?,?,?)";
         final int batchSize = 5;
         int count = 0;
         try(
                 Connection conn = Datenbankverbindung.connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql);
+                PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect);
+                PreparedStatement pstmtInsert = conn.prepareStatement(sqlInsert);
         ){
             for(ElementFahrzeug ElementFahrzeug: fahrzeuge){
-                pstmt.setString(1, ElementFahrzeug.getKennzeichen());
-                pstmt.setString(2, ElementFahrzeug.getModell());
-                pstmt.setString(3, ElementFahrzeug.getHersteller());
-                pstmt.setInt(4, ElementFahrzeug.getMotorleistung());
-
-                pstmt.addBatch();
-                if(++count % batchSize == 0){
-                    pstmt.executeBatch();
+                // SELECT
+                pstmtSelect.setString(1, ElementFahrzeug.getKennzeichen());
+                ResultSet resultSelect = pstmtSelect.executeQuery();
+                int result = 1;
+                while(resultSelect.next()){
+                    result = Integer.parseInt(resultSelect.getString(1));
+                    //System.out.println(result);
+                }
+                if(result == 0) {
+                    // INSERT
+                    pstmtInsert.setString(1, ElementFahrzeug.getKennzeichen());
+                    pstmtInsert.setString(2, ElementFahrzeug.getModell());
+                    pstmtInsert.setString(3, ElementFahrzeug.getHersteller());
+                    pstmtInsert.setInt(4, ElementFahrzeug.getMotorleistung());
+                    pstmtInsert.addBatch();
+                    if (++count % batchSize == 0) {
+                        pstmtInsert.executeBatch();
+                    }
                 }
             }
-            pstmt.executeBatch();
+            pstmtInsert.executeBatch();
         } catch (SQLException e){
             e.printStackTrace();
         } catch (Exception e){
@@ -66,9 +89,11 @@ public class BeispieldatenEinfuegen {
     }
 
     public static void insertTableBussgeld2(){
+        // TODO: umstellen auf Einlesen aus Datei mit SELECT-Statement davor.
         try{
             Connection conn = Datenbankverbindung.connect();
-            String query = "INSERT INTO Bussgeld (Tageszeit, VerstossID, Fahrzeug)" +
+            String query = "DELETE FROM Bussgeld;" +
+                    "INSERT INTO Bussgeld (Tageszeit, VerstossID, Fahrzeug)" +
                     "VALUES" +
                     "('2024-12-20 11:05:15', 1, 'KA-DL-5874')," +
                     "('2023-12-04 16:54:45', 2, 'RA-FD-4213')," +
