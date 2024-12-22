@@ -4,14 +4,14 @@ import java.util.Date;
 
 public class ElementBussgeld {
     private Integer ID;
-    private Date Tageszeit;
+    private String Tageszeit;
     private Integer VerstossID;
     private String Fahrzeug;
 
     public ElementBussgeld() {
     }
 
-    public ElementBussgeld(Integer ID, Date tageszeit, Integer verstossID, String fahrzeug) {
+    public ElementBussgeld(Integer ID, String tageszeit, Integer verstossID, String fahrzeug) {
         this.ID = ID;
         Tageszeit = tageszeit;
         VerstossID = verstossID;
@@ -26,11 +26,11 @@ public class ElementBussgeld {
         this.ID = ID;
     }
 
-    public Date getTageszeit() {
+    public String getTageszeit() {
         return Tageszeit;
     }
 
-    public void setTageszeit(Date tageszeit) {
+    public void setTageszeit(String tageszeit) {
         Tageszeit = tageszeit;
     }
 

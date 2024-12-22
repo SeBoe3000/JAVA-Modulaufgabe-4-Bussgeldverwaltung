@@ -8,24 +8,31 @@ import java.util.List;
 
 public class BeispieldatenEinfuegen {
 
-    public static void insertTableVerstoss(){
-        try{
-            Connection conn = Datenbankverbindung.connect();
-            String query = "INSERT INTO Verstoss (VerstossID, Beschreibung, Strafe, Punkte, Fahrverbot)" +
-                    "VALUES" +
-                    "(1, 'Verstoß gegen die 0,5 Promillegrenze beim 1. Mal', 528.50, 2, 1)," +
-                    "(2, 'Verstoß gegen die 0,5 Promillegrenze beim 2. Mal', 1053.50, 2, 3)," +
-                    "(3, 'Verstoß gegen die 0,5 Promillegrenze beim 3. Mal', 1578.50, 2, 3)," +
-                    "(4, 'Während der Fahrt nicht angeschnallt gewesen', 58.50, NULL, NULL)," +
-                    "(5, 'Als Kraftfahrer das Handy am Steuer genutzt', 128.50, 1, NULL)," +
-                    "(6, 'Als Kraftfahrer das Handy am Steuer genutzt mit Gefährdung', 178.50, 2, NULL)," +
-                    "(7, 'Als Kraftfahrer das Handy am Steuer genutzt mit Sachbeschädigung', 228.50, 2, 1)," +
-                    "(8, '50er-Zone: Überschreitung der Höchstgeschwindigkeit außerorts bis 10 km/h', 48.50, NULL, NULL)," +
-                    "(9, '50er-Zone: Überschreitung der Höchstgeschwindigkeit außerorts 21 - 25 km/h', 128.50, 1, NULL)," +
-                    "(10, '50er-Zone: Überschreitung der Höchstgeschwindigkeit außerorts 41 - 50 km/h', 348.50, 2, 1)";
-            Statement stmt = conn.createStatement();
-            stmt.executeUpdate(query);
-        } catch(SQLException e){
+    public static void insertTableVerstoss(List<ElementVerstoss> verstoss){
+        // TODO: umstellen auf Einlesen aus Datei mit SELECT-Statement davor.
+        String sql = "INSERT INTO Verstoss VALUES(?,?,?,?,?)";
+        final int batchSize = 5;
+        int count = 0;
+        try(
+                Connection conn = Datenbankverbindung.connect();
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+        ){
+            for(ElementVerstoss ElementVerstoss: verstoss){
+                pstmt.setInt(1, ElementVerstoss.getVerstossID());
+                pstmt.setString(2, ElementVerstoss.getBeschreibung());
+                pstmt.setFloat(3, ElementVerstoss.getStrafe());
+                pstmt.setInt(4, ElementVerstoss.getPunkte());
+                pstmt.setInt(5, ElementVerstoss.getFahrverbot());
+
+                pstmt.addBatch();
+                if(++count % batchSize == 0){
+                    pstmt.executeBatch();
+                }
+            }
+            pstmt.executeBatch();
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -58,7 +65,7 @@ public class BeispieldatenEinfuegen {
         }
     }
 
-    public static void insertTableBussgeld(){
+    public static void insertTableBussgeld2(){
         try{
             Connection conn = Datenbankverbindung.connect();
             String query = "INSERT INTO Bussgeld (Tageszeit, VerstossID, Fahrzeug)" +
@@ -90,11 +97,42 @@ public class BeispieldatenEinfuegen {
         }
     }
 
+    public static void insertTableBussgeld(List<ElementBussgeld> bussgeld){
+        // TODO: umstellen auf Einlesen aus Datei mit SELECT-Statement davor.
+        String sql = "INSERT INTO Verstoss VALUES(?,?,?)";
+        final int batchSize = 5;
+        int count = 0;
+        try(
+                Connection conn = Datenbankverbindung.connect();
+                PreparedStatement pstmt = conn.prepareStatement(sql);
+        ){
+            for(ElementBussgeld ElementBussgeld: bussgeld){
+                pstmt.setString(1, ElementBussgeld.getTageszeit());
+                pstmt.setInt(2, ElementBussgeld.getVerstossID());
+                pstmt.setString(3, ElementBussgeld.getFahrzeug());
+
+                pstmt.addBatch();
+                if(++count % batchSize == 0){
+                    pstmt.executeBatch();
+                }
+            }
+            pstmt.executeBatch();
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
     public static void fillTableall(){
-        insertTableVerstoss();
+        List<ElementVerstoss> verstoss = DatenDateiLesen.readVerstoss();
+        insertTableVerstoss(verstoss);
         List<ElementFahrzeug> fahrzeuge = DatenDateiLesen.readFahrezuge();
         insertTableFahrzeug(fahrzeuge);
-        insertTableBussgeld();
+        // TODO: String in Timestamp umwandeln
+        //List<ElementBussgeld> bussgeld = DatenDateiLesen.readBussgeld();
+        //insertTableBussgeld(bussgeld);
+        insertTableBussgeld2();
     }
 
     public static void deleteTableall(){
