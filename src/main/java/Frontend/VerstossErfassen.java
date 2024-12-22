@@ -3,33 +3,30 @@ package Frontend;
 import javax.swing.*;
 import java.awt.*;
 
-public class BussgelderGUI {
-    private static final JFrame start = new JFrame("Bussgelder");
+public class VerstossErfassen {
+    private static final JFrame verstoss = new JFrame("Verstoss erfassen");
 
-    private void start() {
+
+    private void verstoss() {
         JPanel panel = new JPanel();
 
 
-
         // Panel dem Frame hinzufügen
-        start.add(panel);
+        verstoss.add(panel);
 
         // Größe vom Fenster auf Hälte der Bildschirmgröße in die Mitte setzen
         Dimension dim = new Dimension(1920, 1080);
         dim = Toolkit.getDefaultToolkit().getScreenSize();
-        start.setSize(dim.width/2, dim.height/2);
-        start.setLocation(dim.width/4, dim.height/4);
+        verstoss.setSize(dim.width/2, dim.height/2);
+        verstoss.setLocation(dim.width/4, dim.height/4);
         // Fenster Schließen, wenn geschlossen
-        start.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        verstoss.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Fenster anzeigen
-        start.setVisible(true);
+        verstoss.setVisible(true);
     }
 
 
-
-
-
-    private void buttonListenerstart() {
+    private void buttonListenerfahrzeuge() {
         // TODO: ButtonListener implementieren
     }
 
@@ -37,8 +34,8 @@ public class BussgelderGUI {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                start();
-                buttonListenerstart();
+                verstoss();
+                buttonListenerfahrzeuge();
             }
         });
     }
