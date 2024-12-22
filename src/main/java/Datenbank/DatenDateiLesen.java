@@ -19,8 +19,11 @@ public class DatenDateiLesen {
         }
         try{
             Scanner myFileReader = new Scanner(myFile);
+            String line;
+            line = myFileReader.nextLine(); // erste Zeile nicht berücksichtigen
+
             while(myFileReader.hasNextLine()){
-                String line = myFileReader.nextLine();
+                line = myFileReader.nextLine();
                 String[] splitted = line.split(";");
                 Integer Motorleistung = 0;
                 try{
@@ -33,7 +36,6 @@ public class DatenDateiLesen {
                 // Objekte erzeugen
                 ElementFahrzeug element = new ElementFahrzeug(splitted[0], splitted[1], splitted[2], Motorleistung);
                 elementsList.add(element);
-
             }
         } catch (FileNotFoundException e){
             System.out.println("Die Datei existiert nicht");
