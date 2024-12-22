@@ -8,15 +8,20 @@ import java.util.Scanner;
 
 public class DatenDateiLesen {
 
-    public static ArrayList<ElementFahrzeug> readFahrezuge(){
-        ArrayList<ElementFahrzeug> elementsList = new ArrayList<>();
+    public static Object ermittelnFile(String file){
         File myFile;
         String os = System.getProperty("os.name");
         if (os.contains("Wind")) {
-            myFile = new File("src\\main\\java\\Dateien\\Fahrzeuge.csv");
+            myFile = new File("src\\main\\java\\Dateien\\" + file + ".csv");
         } else {
-            myFile = new File("src/main/java/Dateien/Fahrzeuge.csv");
+            myFile = new File("src/main/java/Dateien/" + file + ".csv");
         }
+        return myFile;
+    }
+
+    public static ArrayList<ElementFahrzeug> readFahrezuge(){
+        ArrayList<ElementFahrzeug> elementsList = new ArrayList<>();
+        File myFile = new File(String.valueOf(ermittelnFile("Fahrzeuge")));
         try{
             Scanner myFileReader = new Scanner(myFile);
             String line;
