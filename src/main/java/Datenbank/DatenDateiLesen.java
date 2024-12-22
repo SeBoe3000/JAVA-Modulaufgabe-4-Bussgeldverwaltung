@@ -2,6 +2,7 @@ package Datenbank;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -102,12 +103,11 @@ public class DatenDateiLesen {
                 line = myFileReader.nextLine();
                 String[] splitted = line.split(";");
                 Integer ID = 0;
-                //Date Tageszeit;
+                Timestamp Tageszeit = Timestamp.valueOf("2018-11-12 01:02:11.111111111");
                 Integer VerstossID = 0;
-
                 try{
                     ID = Integer.parseInt(splitted[0]);
-                    //Tageszeit = Float.parseFloat(splitted[1]);
+                    Tageszeit = Timestamp.valueOf(splitted[1]);
                     VerstossID = Integer.parseInt(splitted[2]);
                 }
                 catch(Exception e){
@@ -115,7 +115,7 @@ public class DatenDateiLesen {
                     e.printStackTrace();
                 }
                 // Objekte erzeugen
-                ElementBussgeld element = new ElementBussgeld(ID, splitted[1], VerstossID, splitted[3]);
+                ElementBussgeld element = new ElementBussgeld(ID, Tageszeit, VerstossID, splitted[3]);
                 elementsList.add(element);
             }
         } catch (FileNotFoundException e){

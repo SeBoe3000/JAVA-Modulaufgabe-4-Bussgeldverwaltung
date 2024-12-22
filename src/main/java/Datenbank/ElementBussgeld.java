@@ -1,17 +1,17 @@
 package Datenbank;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class ElementBussgeld {
     private Integer ID;
-    private String Tageszeit;
+    private Timestamp Tageszeit;
     private Integer VerstossID;
     private String Fahrzeug;
 
     public ElementBussgeld() {
     }
 
-    public ElementBussgeld(Integer ID, String tageszeit, Integer verstossID, String fahrzeug) {
+    public ElementBussgeld(Integer ID, Timestamp tageszeit, Integer verstossID, String fahrzeug) {
         this.ID = ID;
         Tageszeit = tageszeit;
         VerstossID = verstossID;
@@ -26,11 +26,11 @@ public class ElementBussgeld {
         this.ID = ID;
     }
 
-    public String getTageszeit() {
+    public Timestamp getTageszeit() {
         return Tageszeit;
     }
 
-    public void setTageszeit(String tageszeit) {
+    public void setTageszeit(Timestamp tageszeit) {
         Tageszeit = tageszeit;
     }
 

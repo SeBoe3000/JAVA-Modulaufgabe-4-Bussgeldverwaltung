@@ -88,8 +88,8 @@ public class BeispieldatenEinfuegen {
         }
     }
 
+    // Nicht verwendete Methode als Beispiel, wie Daten hardcoded importiert werden können ohne Select davor.
     public static void insertTableBussgeld2(){
-        // TODO: umstellen auf Einlesen aus Datei mit SELECT-Statement davor.
         try{
             Connection conn = Datenbankverbindung.connect();
             String query = "DELETE FROM Bussgeld;" +
@@ -124,24 +124,40 @@ public class BeispieldatenEinfuegen {
 
     public static void insertTableBussgeld(List<ElementBussgeld> bussgeld){
         // TODO: umstellen auf Einlesen aus Datei mit SELECT-Statement davor.
-        String sql = "INSERT INTO Verstoss VALUES(?,?,?)";
+        String sqlSelect = "SELECT count(*) FROM Bussgeld" +
+                " WHERE Tageszeit = ? AND VerstossID = ? AND Fahrzeug = ?";
+        String sqlInsert = "INSERT INTO Bussgeld VALUES(?,?,?,?)";
         final int batchSize = 5;
         int count = 0;
         try(
                 Connection conn = Datenbankverbindung.connect();
-                PreparedStatement pstmt = conn.prepareStatement(sql);
+                PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect);
+                PreparedStatement pstmtInsert = conn.prepareStatement(sqlInsert);
         ){
             for(ElementBussgeld ElementBussgeld: bussgeld){
-                pstmt.setString(1, ElementBussgeld.getTageszeit());
-                pstmt.setInt(2, ElementBussgeld.getVerstossID());
-                pstmt.setString(3, ElementBussgeld.getFahrzeug());
+                // SELECT
+                pstmtSelect.setTimestamp(1, ElementBussgeld.getTageszeit());
+                pstmtSelect.setInt(2, ElementBussgeld.getVerstossID());
+                pstmtSelect.setString(3, ElementBussgeld.getFahrzeug());
+                ResultSet resultSelect = pstmtSelect.executeQuery();
+                int result = 1;
+                while(resultSelect.next()){
+                    result = Integer.parseInt(resultSelect.getString(1));
+                    //System.out.println(result);
+                }
+                if(result == 0) {
+                    pstmtInsert.setInt(1, ElementBussgeld.getID());
+                    pstmtInsert.setTimestamp(2, ElementBussgeld.getTageszeit());
+                    pstmtInsert.setInt(3, ElementBussgeld.getVerstossID());
+                    pstmtInsert.setString(4, ElementBussgeld.getFahrzeug());
 
-                pstmt.addBatch();
-                if(++count % batchSize == 0){
-                    pstmt.executeBatch();
+                    pstmtInsert.addBatch();
+                    if (++count % batchSize == 0) {
+                        pstmtInsert.executeBatch();
+                    }
                 }
             }
-            pstmt.executeBatch();
+            pstmtInsert.executeBatch();
         } catch (SQLException e){
             e.printStackTrace();
         } catch (Exception e){
@@ -154,10 +170,8 @@ public class BeispieldatenEinfuegen {
         insertTableVerstoss(verstoss);
         List<ElementFahrzeug> fahrzeuge = DatenDateiLesen.readFahrezuge();
         insertTableFahrzeug(fahrzeuge);
-        // TODO: String in Timestamp umwandeln
-        //List<ElementBussgeld> bussgeld = DatenDateiLesen.readBussgeld();
-        //insertTableBussgeld(bussgeld);
-        insertTableBussgeld2();
+        List<ElementBussgeld> bussgeld = DatenDateiLesen.readBussgeld();
+        insertTableBussgeld(bussgeld);
     }
 
     public static void deleteTableall(){
