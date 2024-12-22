@@ -1,8 +1,6 @@
 import Datenbank.BeispieldatenEinfuegen;
 import Datenbank.Tabellenerstellen;
 import Frontend.BussgelderGUI;
-import Frontend.FahrzeugeErfassen;
-import Frontend.VerstossErfassen;
 
 public class Bussgelder {
     public static void main(String[] args) {
