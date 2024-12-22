@@ -13,13 +13,5 @@ public class Bussgelder {
         // GUI aufrufen
         BussgelderGUI calc = new BussgelderGUI();
         calc.main();
-/*
-        FahrzeugeErfassen fahrzeug = new FahrzeugeErfassen();
-        fahrzeug.main();
-
-        VerstossErfassen verstoss = new VerstossErfassen();
-        verstoss.main();
-*/
-
     }
 }
