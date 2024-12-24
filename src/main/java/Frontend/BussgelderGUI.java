@@ -16,9 +16,9 @@ public class BussgelderGUI {
     ButtonGroup create_group = new ButtonGroup();
 
     // Ergebnisse von Abfragen
-    JTextField abfrage1 = new JTextField(Abfragen.abfrageHerstellerMeisteVerstoss());
-    JTextField abfrage2 = new JTextField(Abfragen.abfrageTagMeisteVerstoss());
-    JTextField abfrage3 = new JTextField(Abfragen.abfrageFahrzeugMeisteVerstoss());
+    JLabel abfrage1 = new JLabel(Abfragen.abfrageHerstellerMeisteVerstoss());
+    JLabel abfrage2 = new JLabel(Abfragen.abfrageTagMeisteVerstoss());
+    JLabel abfrage3 = new JLabel(Abfragen.abfrageFahrzeugMeisteVerstoss());
 
     private void start() {
         JPanel panel = new JPanel();
