@@ -72,8 +72,8 @@ public class EingabenCheck {
 
     /* Überprüfung String auf
     - mind. ein Zeichen.
-    - TODO: kein DROP TABLE, DELETE, GRANT, REVOKE vorhanden
-    - TODO: kein OR mit Leerzeichen davor und danach vorhanden */
+    - kein DROP TABLE, DELETE, GRANT, REVOKE vorhanden
+    - kein OR mit Leerzeichen davor und danach vorhanden */
     public static boolean isValidString(String eingabe){
         boolean isValid = true;
         // Mind. ein Zeichen muss vorhanden sein
@@ -82,6 +82,16 @@ public class EingabenCheck {
         } else {
             isValid = true;
         }
+        // Kein Drop Table, Delete, Grant, Revoke oder or mit Leerzeichen davor und danach vorhanden
+        boolean injection = false;
+        Pattern pattern = Pattern.compile("([dD][rR][oO][pP]|[dD][eE][lL][eE][tT][eE]|[gG][rR][aA][nN][tT]|[rR][eE][vV][oO][kK][eE]|\\s[oO][rR]\\s)");
+        Matcher matcher = pattern.matcher(eingabe);
+        injection = matcher.find();
+        // System.out.println("injection: " + injection);
+        if(injection == true){
+            isValid = false;
+        }
+
         return isValid;
     }
 
@@ -136,32 +146,36 @@ public class EingabenCheck {
         Matcher matcher = pattern.matcher(eingabe);
         isValid = matcher.find();
 
-        String[] parts = eingabe.split("-");
-        String part1 = parts[0];
-        // System.out.println(part1);
+        // Zerlegen nur, wenn richtiger Aufbau, ansonsten kommt es zu einem Fehler.
+        if(isValid) {
 
-        //TODO: gültige Unterscheidungskennzeichen aus dem Internet laden und in Liste / Datenbank speichern
-        ArrayList<String> Kennzeichen = new ArrayList<>();
-        Kennzeichen.add("A");
-        Kennzeichen.add("KA");
-        Kennzeichen.add("RA");
-        Kennzeichen.add("GAP");
+            String[] parts = eingabe.split("-");
+            String part1 = parts[0];
+            // System.out.println(part1);
 
-        boolean startFound = false;
-        for(int i = 0; i < Kennzeichen.size(); i++){
-            if(Kennzeichen.get(i).equals(part1)){
-                startFound = true;
-                // System.out.println("startFound ist: " + startFound);
-                break;
+            //TODO: gültige Unterscheidungskennzeichen aus dem Internet laden und in Liste / Datenbank speichern
+            ArrayList<String> Kennzeichen = new ArrayList<>();
+            Kennzeichen.add("A");
+            Kennzeichen.add("KA");
+            Kennzeichen.add("RA");
+            Kennzeichen.add("GAP");
+
+            boolean startFound = false;
+            for (int i = 0; i < Kennzeichen.size(); i++) {
+                if (Kennzeichen.get(i).equals(part1)) {
+                    startFound = true;
+                    // System.out.println("startFound ist: " + startFound);
+                    break;
+                }
             }
-        }
-        if(startFound == false) {
-            isValid = false;
-        }
-        // Verstoß gegen die guten Sitten
-        if(parts[1].equals("SS")) {
-            isValid = false;
-            // System.out.println("Verstoß gegen die guten Sitten");
+            if (startFound == false) {
+                isValid = false;
+            }
+            // Verstoß gegen die guten Sitten
+            if (parts[1].equals("SS")) {
+                isValid = false;
+                // System.out.println("Verstoß gegen die guten Sitten");
+            }
         }
         return isValid;
     }
