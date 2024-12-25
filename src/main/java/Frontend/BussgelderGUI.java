@@ -20,6 +20,8 @@ public class BussgelderGUI {
     JLabel abfrage2 = new JLabel(Abfragen.abfrageTagMeisteVerstoss());
     JLabel abfrage3 = new JLabel(Abfragen.abfrageFahrzeugMeisteVerstoss());
 
+
+
     private void start() {
         JPanel panel = new JPanel();
 

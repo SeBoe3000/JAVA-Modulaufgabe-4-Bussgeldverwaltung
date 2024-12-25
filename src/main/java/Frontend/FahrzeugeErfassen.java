@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import static Datenbank.BeispieldatenEinfuegen.insertTableFahrzeug;
+
 public class FahrzeugeErfassen {
     private static final JFrame fahrzeuge = new JFrame("Fahrzeuge erfassen");
     // Kennzeichen
@@ -85,7 +87,6 @@ public class FahrzeugeErfassen {
     }
 
     private void buttonListenerfahrzeuge() {
-        // TODO: ButtonListener implementieren
         ActionListener erfassen = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -99,7 +100,7 @@ public class FahrzeugeErfassen {
                 // nur wenn inWork false ist, die Datensätze in die Datenbank schreiben.
                 if(elementHinzu() == false){
                     elementInsert();
-                    // TODO: nur wenn Insert erfolgreich war, zum Start zurückkehren
+                    // Dialog nur bei keinen doppelten Datensätzen schließen wäre nur möglich, wenn Daten in einer Liste angezeigt werden.
                     backToStart();
                 }
             }
@@ -135,18 +136,31 @@ public class FahrzeugeErfassen {
                     System.out.println("Wert in Liste vorhanden");
                 }
 
-                // Verarbeitung wenn mind. 1 Feld gefüllt ist
-                if(notInWork == false) {
-                    // TODO: Dialog hochbringen, ob Eingabe verarbeitet werden soll.
-                    // Bei Ja, Eingabencheck, Insert aufrufen und Dialog schließen
-                    // Bei Nein, Fenster schließen
-                }
-
-                // Verarbeitung, wenn noch ein Element in der Liste drin ist
-                if(noElement == false) {
-                    // TODO: Dialog hochbringen, ob Elemente hinzugefügt werden sollen
-                    // Bei Ja, Insert aufrufen und Dialog schließen
-                    // Bei Nein, Fenster schließen
+                // Verarbeitung wenn mind. 1 Feld gefüllt oder noch ein Element in der Liste drin ist
+                if(notInWork == false || noElement == false) {
+                    String[] options = {"Ja", "Nein"};
+                    int jaNein = JOptionPane.showOptionDialog(null, "Sollen die Änderungen gespeichert werden?",
+                            "Speichern?", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+                    if (jaNein == 1){
+                        // Bei Nein, Fenster schließen
+                        backToStart();
+                    } else {
+                        // Bei Ja Eingabencheck ausführen (nur wenn Felder gefüllt sind)
+                        if(notInWork == false) {
+                            // Nur einfügen, wenn keine Fehlermeldung vorhanden
+                            if(elementHinzu() == false){
+                                elementInsert();
+                                // Dialog nur bei keinen doppelten Datensätzen schließen wäre nur möglich, wenn Daten in einer Liste angezeigt werden.
+                                backToStart();
+                            }
+                        }
+                        if(noElement == false) {
+                            // Bei Ja Insert aufrufen und Dialog schließen
+                            elementInsert();
+                            // Dialog nur bei keinen doppelten Datensätzen schließen wäre nur möglich, wenn Daten in einer Liste angezeigt werden.
+                            backToStart();
+                        }
+                    }
                 }
 
                 // Verarbeitung, wenn alle Felder leer sind und kein Element in der Liste ist
@@ -191,8 +205,10 @@ public class FahrzeugeErfassen {
 
         if(anzahlFelderKorrekt == 4){
             boolean insertPossible = true;
-            // TODO: Prüfung auf vorhandenen Datensatz falls ja, insertPossible auf false ändern.
-            // TODO: nächstes If nach außerhalb anbringen und true und false hier tauschen.
+            // Hier könnte auf einen doppelten Datensatz geprüft werden.
+            // Beim Insert erfolgt eine Meldung, ob doppelte Datensätze dabei waren, oder nicht. Daher bleibt hier die Überprüfung aus.
+            // Bei einem vorhandenen Datensatz könnte dann insertPossible auf false geändert werden und ggf.
+            // das nächste If nach außerhalb angebracht werden und true und false hier getauscht werden.
 
             if(insertPossible) {
                 // Element der Liste hinzufügen
@@ -210,9 +226,14 @@ public class FahrzeugeErfassen {
     }
 
     private void elementInsert(){
-        // TODO: nochmal prüfen, ob alle Daten erfasst werden können (mehrbenutzerbetrieb)
-        // TODO: Liste der Elemente abarbeiten und in Datenbank erfassen
-        System.out.println("Liste Elemente in Datenbank erfassen");
+        // Liste der Elemente abarbeiten und in Datenbank erfassen. Meldung über durchgeführten Insert wird ausgegeben.
+        // Wurden in der Zwischenzeit Daten bereits erfasst (mehrbenutzerbetrieb) ist es hier nicht mehr möglich einzugreifen.
+        //  Dafür müssten die bereits erfassten Daten als Liste angezeigt werden und eine nachträgliche Bearbeitung der Daten möglich sein.
+        if(insertTableFahrzeug(FahrzeugeList) == true) {
+            JOptionPane.showMessageDialog(null, "Die Datensätze wurden alle erfolgreich erfasst.");
+        } else {
+            JOptionPane.showMessageDialog(null, "Es waren doppelte Datensätze vorhanden. Diese wurden nicht erfasst. Der Rest wurde verarbeitet.");
+        }
     }
 
     // Prüfung auf gültige Eingaben

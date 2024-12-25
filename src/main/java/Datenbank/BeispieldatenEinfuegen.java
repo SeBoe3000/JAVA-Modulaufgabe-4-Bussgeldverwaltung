@@ -49,7 +49,8 @@ public class BeispieldatenEinfuegen {
         }
     }
 
-    public static void insertTableFahrzeug(List<ElementFahrzeug> fahrzeuge){
+    public static boolean insertTableFahrzeug(List<ElementFahrzeug> fahrzeuge){
+        Boolean insert = false;
         String sqlSelect = "SELECT count(*) FROM Fahrzeug WHERE Kennzeichen = ?";
         String sqlInsert = "INSERT INTO Fahrzeug VALUES(?,?,?,?)";
         final int batchSize = 5;
@@ -78,6 +79,7 @@ public class BeispieldatenEinfuegen {
                     if (++count % batchSize == 0) {
                         pstmtInsert.executeBatch();
                     }
+                    insert = true;
                 }
             }
             pstmtInsert.executeBatch();
@@ -86,6 +88,7 @@ public class BeispieldatenEinfuegen {
         } catch (Exception e){
             e.printStackTrace();
         }
+        return insert;
     }
 
     // Nicht verwendete Methode als Beispiel, wie Daten hardcoded importiert werden können ohne Select davor.
