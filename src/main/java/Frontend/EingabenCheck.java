@@ -82,7 +82,7 @@ public class EingabenCheck {
         } else {
             isValid = true;
         }
-        // Kein Drop Table, Delete, Grant, Revoke oder or mit Leerzeichen davor und danach vorhanden
+        // Kein Drop, Delete, Grant, Revoke oder or mit Leerzeichen davor und danach vorhanden
         boolean injection = false;
         Pattern pattern = Pattern.compile("([dD][rR][oO][pP]|[dD][eE][lL][eE][tT][eE]|[gG][rR][aA][nN][tT]|[rR][eE][vV][oO][kK][eE]|\\s[oO][rR]\\s)");
         Matcher matcher = pattern.matcher(eingabe);

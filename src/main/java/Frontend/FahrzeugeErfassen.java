@@ -190,7 +190,7 @@ public class FahrzeugeErfassen {
             anzahlFelderKorrekt ++;
         }
 
-        System.out.println("Anzahlkorrekter Felder " + anzahlFelderKorrekt);
+        //System.out.println("Anzahlkorrekter Felder " + anzahlFelderKorrekt);
 
         if(anzahlFelderKorrekt == 4){
             boolean insertPossible = true;
