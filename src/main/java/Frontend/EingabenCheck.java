@@ -1,5 +1,9 @@
 package Frontend;
 
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class EingabenCheck {
 
     /* Überprüfung String auf gültige Fließkommazahl, d.h.:
@@ -120,17 +124,45 @@ public class EingabenCheck {
     }
 
     /* Überprüfung String auf Kennzeichen
-    - TODO: 1-3 Buchstaben + "-" + 1-2 Buchstaben + "-" + 1-4 Zahlen
-    - TODO: nur Großbuchstaben ohne Umlaute.
-    - TODO: Zahlenfolge beginnt nicht mit 0
-    - TODO: nur gültige Unterscheidungskennzeichen, z.B. Liste hier: https://autokennzeichen.de/a-z/
-    - TODO: Verstößt nicht gegen die guten Sitten, d.h. z.B. kein SS.
-    - TODO: kein DROP TABLE, DELETE, GRANT, REVOKE vorhanden
-    - TODO: kein OR mit Leerzeichen davor und danach vorhanden
+    - 1-3 Buchstaben + "-" + 1-2 Buchstaben + "-" + 1-4 Zahlen
+    - nur Großbuchstaben ohne Umlaute.
+    - Zahlenfolge beginnt nicht mit 0
+    - nur gültige Unterscheidungskennzeichen, z.B. Liste hier: https://autokennzeichen.de/a-z/
+    - Verstößt nicht gegen die guten Sitten, d.h. z.B. kein SS.
     Hinweis: etwaige weitere Regeln wie z.B. historische oder elektronische Fahrzeuge werden hier nicht beachtet. */
     public static boolean isValidKennzeichen(String eingabe){
         boolean isValid = true;
+        Pattern pattern = Pattern.compile("^[A-Z]{1,3}-[A-Z]{1,2}-[1-9][0-9]{0,3}$");
+        Matcher matcher = pattern.matcher(eingabe);
+        isValid = matcher.find();
 
+        String[] parts = eingabe.split("-");
+        String part1 = parts[0];
+        // System.out.println(part1);
+
+        //TODO: gültige Unterscheidungskennzeichen aus dem Internet laden und in Liste / Datenbank speichern
+        ArrayList<String> Kennzeichen = new ArrayList<>();
+        Kennzeichen.add("A");
+        Kennzeichen.add("KA");
+        Kennzeichen.add("RA");
+        Kennzeichen.add("GAP");
+
+        boolean startFound = false;
+        for(int i = 0; i < Kennzeichen.size(); i++){
+            if(Kennzeichen.get(i).equals(part1)){
+                startFound = true;
+                // System.out.println("startFound ist: " + startFound);
+                break;
+            }
+        }
+        if(startFound == false) {
+            isValid = false;
+        }
+        // Verstoß gegen die guten Sitten
+        if(parts[1].equals("SS")) {
+            isValid = false;
+            // System.out.println("Verstoß gegen die guten Sitten");
+        }
         return isValid;
     }
 
