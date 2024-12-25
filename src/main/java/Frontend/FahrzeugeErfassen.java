@@ -97,8 +97,19 @@ public class FahrzeugeErfassen {
         ActionListener ok = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // nur wenn inWork false ist, die Datensätze in die Datenbank schreiben.
-                if(elementHinzu() == false){
+                // Prüfung ob 1 Feld gefüllt ist
+                boolean notInWork = checkFieldsfilled();
+                // Check ob Element in der Liste
+                boolean noElement = checkElemetInList();
+
+                // bei leeren Feldern und vorhandenem Element in der Liste den Insert durchführen und den Dialog schließen
+                if(notInWork == true && noElement == false){
+                    elementInsert();
+                    // Dialog nur bei keinen doppelten Datensätzen schließen wäre nur möglich, wenn Daten in einer Liste angezeigt werden.
+                    backToStart();
+                }
+                // ist mind. 1 Feld gefüllt, dann nur wenn inWork false ist, die Datensätze in die Datenbank schreiben.
+                else if(elementHinzu() == false){
                     elementInsert();
                     // Dialog nur bei keinen doppelten Datensätzen schließen wäre nur möglich, wenn Daten in einer Liste angezeigt werden.
                     backToStart();
@@ -109,32 +120,10 @@ public class FahrzeugeErfassen {
         ActionListener abbrechen = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean notInWork = true;
-                boolean noElement = true;
-                
                 // Prüfung ob 1 Feld gefüllt ist
-                if(!(kennzeichen.getTextfield().isEmpty())){
-                    notInWork = false;
-                    //System.out.println("Noch nicht fertig - Kennzeichen");
-                }
-                if(!(modell.getTextfield().isEmpty())){
-                    notInWork = false;
-                    //System.out.println("Noch nicht fertig - Modell");
-                }
-                if(!(hersteller.getTextfield().isEmpty())){
-                    notInWork = false;
-                    //System.out.println("Noch nicht fertig - Hersteller");
-                }
-                if(!(motorleistung.getTextfield().isEmpty())){
-                    notInWork = false;
-                    //System.out.println("Noch nicht fertig - Motorleistung");
-                }
-                
+                boolean notInWork = checkFieldsfilled();
                 // Check ob Element in der Liste
-                if(anzahlElemente > 0){
-                    noElement = false;
-                    System.out.println("Wert in Liste vorhanden");
-                }
+                boolean noElement = checkElemetInList();
 
                 // Verarbeitung wenn mind. 1 Feld gefüllt oder noch ein Element in der Liste drin ist
                 if(notInWork == false || noElement == false) {
@@ -207,8 +196,7 @@ public class FahrzeugeErfassen {
             boolean insertPossible = true;
             // Hier könnte auf einen doppelten Datensatz geprüft werden.
             // Beim Insert erfolgt eine Meldung, ob doppelte Datensätze dabei waren, oder nicht. Daher bleibt hier die Überprüfung aus.
-            // Bei einem vorhandenen Datensatz könnte dann insertPossible auf false geändert werden und ggf.
-            // das nächste If nach außerhalb angebracht werden und true und false hier getauscht werden.
+            // Bei einem vorhandenen Datensatz könnte dann insertPossible auf false geändert werden und ggf. das nächste If nach außerhalb angebracht werden und true und false hier getauscht werden.
 
             if(insertPossible) {
                 // Element der Liste hinzufügen
@@ -228,7 +216,7 @@ public class FahrzeugeErfassen {
     private void elementInsert(){
         // Liste der Elemente abarbeiten und in Datenbank erfassen. Meldung über durchgeführten Insert wird ausgegeben.
         // Wurden in der Zwischenzeit Daten bereits erfasst (mehrbenutzerbetrieb) ist es hier nicht mehr möglich einzugreifen.
-        //  Dafür müssten die bereits erfassten Daten als Liste angezeigt werden und eine nachträgliche Bearbeitung der Daten möglich sein.
+        // Dafür müssten die bereits erfassten Daten als Liste angezeigt werden und eine nachträgliche Bearbeitung der Daten möglich sein.
         if(insertTableFahrzeug(FahrzeugeList) == true) {
             JOptionPane.showMessageDialog(null, "Die Datensätze wurden alle erfolgreich erfasst.");
         } else {
@@ -272,16 +260,54 @@ public class FahrzeugeErfassen {
         }
     }
 
-    // Felder nach erfolgreicher Verarbeitung oder Abbrechen leeren
+    // Prüfung ob 1 Feld gefüllt ist
+    public boolean checkFieldsfilled() {
+        Boolean notInWork = true;
+        if (!(kennzeichen.getTextfield().isEmpty())) {
+            notInWork = false;
+            //System.out.println("Noch nicht fertig - Kennzeichen");
+        }
+        if (!(modell.getTextfield().isEmpty())) {
+            notInWork = false;
+            //System.out.println("Noch nicht fertig - Modell");
+        }
+        if (!(hersteller.getTextfield().isEmpty())) {
+            notInWork = false;
+            //System.out.println("Noch nicht fertig - Hersteller");
+        }
+        if (!(motorleistung.getTextfield().isEmpty())) {
+            notInWork = false;
+            //System.out.println("Noch nicht fertig - Motorleistung");
+        }
+        return notInWork;
+    }
+
+    // Prüfung, ob ein Wert in der Liste vorhanden ist.
+    public boolean checkElemetInList() {
+        boolean noElement = true;
+        if (anzahlElemente > 0) {
+            noElement = false;
+            System.out.println("Wert in Liste vorhanden");
+        }
+        return noElement;
+    }
+
+    // Felder nach erfolgreicher Verarbeitung oder Abbrechen leeren und Fehler entfernen
     private void felderLeeren(){
+        // Felder leeren
         kennzeichen.setTextField("");
         modell.setTextField("");
         hersteller.setTextField("");
         motorleistung.setTextField("");
+        // Auch einen etwaigen Fehler aus den Feldern entfernen
+        kennzeichen.removeError();
+        modell.removeError();
+        hersteller.removeError();
+        motorleistung.removeError();
     }
 
     private void backToStart(){
-        // Werte in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
+        // Werte und Fehler in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
         felderLeeren();
         // Frame start wieder anzeigen
         BussgelderGUI calc = new BussgelderGUI();

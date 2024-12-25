@@ -16,6 +16,7 @@ public class BussgelderGUI {
     ButtonGroup create_group = new ButtonGroup();
 
     // Ergebnisse von Abfragen
+    // TODO: Abfragen nach Eingabe neuer Daten aktualisieren
     JLabel abfrage1 = new JLabel(Abfragen.abfrageHerstellerMeisteVerstoss());
     JLabel abfrage2 = new JLabel(Abfragen.abfrageTagMeisteVerstoss());
     JLabel abfrage3 = new JLabel(Abfragen.abfrageFahrzeugMeisteVerstoss());
