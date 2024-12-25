@@ -9,7 +9,7 @@ public class Abfragen {
     public static String abfrageHerstellerMeisteVerstoss(){
         String ergebnis = "";
         String query = "SELECT Hersteller, count(*) " +
-                "FROM Fahrzeug FULL JOIN Bussgeld ON Fahrzeug.Kennzeichen = Bussgeld.Fahrzeug " +
+                "FROM Fahrzeug RIGHT JOIN Bussgeld ON Fahrzeug.Kennzeichen = Bussgeld.Fahrzeug " +
                 "GROUP BY Hersteller " +
                 "ORDER BY count(*) DESC " +
                 "LIMIT 5";
@@ -36,7 +36,7 @@ public class Abfragen {
     public static String abfrageTagMeisteVerstoss(){
         String ergebnis = "";
         String query = "SELECT DATE(Tageszeit), count(*) " +
-                "FROM Fahrzeug FULL JOIN Bussgeld ON Fahrzeug.Kennzeichen = Bussgeld.Fahrzeug " +
+                "FROM Fahrzeug RIGHT JOIN Bussgeld ON Fahrzeug.Kennzeichen = Bussgeld.Fahrzeug " +
                 "GROUP BY DATE(Tageszeit) " +
                 "ORDER BY count(*) DESC " +
                 "LIMIT 1";
@@ -64,7 +64,7 @@ public class Abfragen {
     public static String abfrageFahrzeugMeisteVerstoss(){
         String ergebnis = "";
         String query = "SELECT Kennzeichen, count(*) " +
-                "FROM Fahrzeug FULL JOIN Bussgeld ON Fahrzeug.Kennzeichen = Bussgeld.Fahrzeug " +
+                "FROM Fahrzeug RIGHT JOIN Bussgeld ON Fahrzeug.Kennzeichen = Bussgeld.Fahrzeug " +
                 "GROUP BY Kennzeichen " +
                 "ORDER BY count(*) DESC " +
                 "LIMIT 1";
