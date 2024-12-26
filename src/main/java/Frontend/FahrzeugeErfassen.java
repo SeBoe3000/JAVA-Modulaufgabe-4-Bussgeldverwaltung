@@ -201,6 +201,15 @@ public class FahrzeugeErfassen {
             // Beim Insert erfolgt eine Meldung, ob doppelte Datensätze dabei waren, oder nicht. Daher bleibt hier die Überprüfung aus.
             // Bei einem vorhandenen Datensatz könnte dann insertPossible auf false geändert werden und ggf. das nächste If nach außerhalb angebracht werden und true und false hier getauscht werden.
 
+            // Prüfung, ob Element bereits in der Liste vorhanden ist, falls ja nicht hinzufügen.
+            boolean inList = checkElementAlreadyInList(eingabeKennzeichen);
+            if(inList == true){
+                JOptionPane.showMessageDialog(null, "Das angegebene Fahrzeug befindet sich bereits in der ElementListe. Geben Sie ein anderes Kennzeichen an.", "Datensatz bereits in ElementListe vorhanden", JOptionPane.ERROR_MESSAGE);
+                insertPossible = false;
+            }
+
+            // TODO
+
             if(insertPossible) {
                 // Element der Liste hinzufügen
                 ElementFahrzeug fahrzeug = new ElementFahrzeug(eingabeKennzeichen, eingabeModell, eingabeHersteller, eingabeMotorleistung);
@@ -293,6 +302,18 @@ public class FahrzeugeErfassen {
             System.out.println("Wert in Liste vorhanden");
         }
         return noElement;
+    }
+
+    // Prüfung, ob der Wert bereits in der Liste vorhanden ist
+    public boolean checkElementAlreadyInList(String Kennzeichen){
+        boolean inList = false;
+        for(ElementFahrzeug ElementFahrzeug: FahrzeugeList){
+            if (Kennzeichen.equals(ElementFahrzeug.getKennzeichen())){
+                System.out.println("Bereits vorhanden");
+                inList = true;
+            }
+        }
+        return inList;
     }
 
     // Felder nach erfolgreicher Verarbeitung oder Abbrechen leeren und Fehler entfernen
