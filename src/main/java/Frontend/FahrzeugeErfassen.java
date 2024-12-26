@@ -132,8 +132,6 @@ public class FahrzeugeErfassen {
                     int jaNein = JOptionPane.showOptionDialog(null, "Sollen die Änderungen gespeichert werden?",
                             "Speichern?", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
                     if (jaNein == 1){
-                        // Arrayliste leeren
-                        FahrzeugeList.clear();
                         // Bei Nein, Fenster schließen
                         backToStart();
                     } else {
@@ -207,8 +205,6 @@ public class FahrzeugeErfassen {
                 JOptionPane.showMessageDialog(null, "Das angegebene Fahrzeug befindet sich bereits in der ElementListe. Geben Sie ein anderes Kennzeichen an.", "Datensatz bereits in ElementListe vorhanden", JOptionPane.ERROR_MESSAGE);
                 insertPossible = false;
             }
-
-            // TODO
 
             if(insertPossible) {
                 // Element der Liste hinzufügen
@@ -331,6 +327,8 @@ public class FahrzeugeErfassen {
     }
 
     private void backToStart(){
+        // Arrayliste leeren
+        FahrzeugeList.clear();
         // Bei Beendung Programm anzahlElemente auf 0 zurücksetzen. Ansonsten kommt nach Erfassung bei Abbrechen der Dialog.
         anzahlElemente = 0;
         // Werte und Fehler in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
