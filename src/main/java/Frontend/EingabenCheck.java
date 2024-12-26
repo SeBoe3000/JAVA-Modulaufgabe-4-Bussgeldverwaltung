@@ -38,6 +38,7 @@ public class EingabenCheck {
     /* Überprüfung String auf gültige Integer, d.h:
     - Nur Zahlen zulässige Zeichen
     - Mindestens eine Zahl zwischen 1 und 9 muss angegeben sein. (Dadurch Überprüfung auf nicht leerer Wert)
+    - wird per try versucht zu parsen, falls erfolglos deutet dies auf eine zu große Zahl hin.
     */
     public static boolean isValidInteger(String eingabe){
         boolean isValid = true;
@@ -55,6 +56,14 @@ public class EingabenCheck {
         if (anzahlZahl == 0){
             isValid = false;
         }
+
+        try {
+            Integer eingabeZahl = Integer.parseInt(eingabe);
+        } catch (Exception e) {
+            isValid = false;
+            // System.out.println("Zu große Zahl");
+        }
+
         return isValid;
     }
 
