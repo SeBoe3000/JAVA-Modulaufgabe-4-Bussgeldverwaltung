@@ -307,6 +307,8 @@ public class FahrzeugeErfassen {
     }
 
     private void backToStart(){
+        // Bei Beendung Programm anzahlElemente auf 0 zurücksetzen. Ansonsten kommt nach Erfassung bei Abbrechen der Dialog.
+        anzahlElemente = 0;
         // Werte und Fehler in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
         felderLeeren();
         // Frame start wieder anzeigen
