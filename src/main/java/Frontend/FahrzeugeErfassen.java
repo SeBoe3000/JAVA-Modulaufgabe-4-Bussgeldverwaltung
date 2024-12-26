@@ -305,7 +305,7 @@ public class FahrzeugeErfassen {
         boolean inList = false;
         for(ElementFahrzeug ElementFahrzeug: FahrzeugeList){
             if (Kennzeichen.equals(ElementFahrzeug.getKennzeichen())){
-                System.out.println("Bereits vorhanden");
+                // System.out.println("Bereits vorhanden");
                 inList = true;
             }
         }
