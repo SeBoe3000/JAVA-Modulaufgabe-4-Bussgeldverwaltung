@@ -146,7 +146,7 @@ public class FahrzeugeErfassen {
                                 backToStart();
                             }
                         }
-                        if(noElement == false) {
+                        if(noElement == false && notInWork == true) {
                             // Bei Ja Insert aufrufen und Dialog schließen
                             elementInsert();
                             // Dialog nur bei keinen doppelten Datensätzen schließen wäre nur möglich, wenn Daten in einer Liste angezeigt werden.
