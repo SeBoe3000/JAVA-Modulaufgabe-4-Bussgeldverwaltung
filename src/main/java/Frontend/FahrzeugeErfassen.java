@@ -125,12 +125,15 @@ public class FahrzeugeErfassen {
                 // Check ob Element in der Liste
                 boolean noElement = checkElemetInList();
 
+                System.out.println("Ergebnis Check - notInWork: " + notInWork + " und noElement: " + noElement);
                 // Verarbeitung wenn mind. 1 Feld gefüllt oder noch ein Element in der Liste drin ist
                 if(notInWork == false || noElement == false) {
                     String[] options = {"Ja", "Nein"};
                     int jaNein = JOptionPane.showOptionDialog(null, "Sollen die Änderungen gespeichert werden?",
                             "Speichern?", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
                     if (jaNein == 1){
+                        // Arrayliste leeren
+                        FahrzeugeList.clear();
                         // Bei Nein, Fenster schließen
                         backToStart();
                     } else {
