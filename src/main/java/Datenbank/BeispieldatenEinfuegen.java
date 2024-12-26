@@ -5,7 +5,8 @@ import java.util.List;
 
 public class BeispieldatenEinfuegen {
 
-    public static void insertTableVerstoss(List<ElementVerstoss> verstoss){
+    public static boolean insertTableVerstoss(List<ElementVerstoss> verstoss){
+        Boolean insert = false;
         String sqlSelect = "SELECT count(*) FROM Verstoss WHERE" +
                 " Beschreibung = ? AND Strafe = ? AND Punkte = ? AND Fahrverbot = ?";
         String sqlInsert = "INSERT INTO Verstoss VALUES(?,?,?,?,?)";
@@ -39,6 +40,7 @@ public class BeispieldatenEinfuegen {
                     if (++count % batchSize == 0) {
                         pstmtInsert.executeBatch();
                     }
+                    insert = true;
                 }
             }
             pstmtInsert.executeBatch();
@@ -47,6 +49,7 @@ public class BeispieldatenEinfuegen {
         } catch (Exception e){
             e.printStackTrace();
         }
+        return insert;
     }
 
     public static boolean insertTableFahrzeug(List<ElementFahrzeug> fahrzeuge){
