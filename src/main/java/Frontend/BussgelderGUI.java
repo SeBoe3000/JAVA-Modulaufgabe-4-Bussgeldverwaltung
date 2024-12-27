@@ -19,9 +19,9 @@ public class BussgelderGUI implements KeyListener {
 
     // Ergebnisse von Abfragen
     // TODO: Abfragen nach Eingabe neuer Daten aktualisieren
-    JLabel abfrage1 = new JLabel(Abfragen.abfrageHerstellerMeisteVerstoss());
-    JLabel abfrage2 = new JLabel(Abfragen.abfrageTagMeisteVerstoss());
-    JLabel abfrage3 = new JLabel(Abfragen.abfrageFahrzeugMeisteVerstoss());
+    JLabel abfrage1 = new JLabel();
+    JLabel abfrage2 = new JLabel();
+    JLabel abfrage3 = new JLabel();
 
 
     private void start() {
@@ -106,12 +106,22 @@ public class BussgelderGUI implements KeyListener {
         start.setVisible(false);
     }
 
+    public void abfragenUpdaten(){
+        abfrage1.setText(Abfragen.abfrageHerstellerMeisteVerstoss());
+        abfrage2.setText(Abfragen.abfrageTagMeisteVerstoss());
+        abfrage3.setText(Abfragen.abfrageFahrzeugMeisteVerstoss());
+        // System.out.println("Ergebnis abfragenUpdate: " + Abfragen.abfrageTagMeisteVerstoss());
+        // System.out.println(abfrage2.getText());
+    }
+
     public void main() {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
                 start();
                 buttonListenerstart();
+                // Abfragen setzen
+                abfragenUpdaten();
             }
         });
     }
