@@ -214,7 +214,7 @@ public class FahrzeugeErfassen {
             // Prüfung, ob Element bereits in Datenbank vorhanden ist, falls ja nicht hinzufügen.
             boolean inDatenbank = checkElementAlreadyInDatenbank(eingabeKennzeichen);
             if(inDatenbank == true){
-                JOptionPane.showMessageDialog(null, "Der angegebene Verstoss befindet sich bereits in der Datenbank. Geben Sie einen anderen Verstoss an.", "Datensatz bereits in Datenbank vorhanden", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Das angegebene Kennzeichen befindet sich bereits in der Datenbank. Geben Sie einen anderes Kennzeichen an.", "Datensatz bereits in Datenbank vorhanden", JOptionPane.ERROR_MESSAGE);
                 insertPossible = false;
             }
 
@@ -338,7 +338,7 @@ public class FahrzeugeErfassen {
             int result = 1;
             while (resultSelect.next()) {
                 result = Integer.parseInt(resultSelect.getString(1));
-                System.out.println(result);
+                // System.out.println(result);
                 if (result == 1) {
                     inDatenbank = true;
                 }
