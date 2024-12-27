@@ -1,11 +1,16 @@
 package Frontend;
 
+import Datenbank.Datenbankverbindung;
 import Datenbank.ElementVerstoss;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static Datenbank.BeispieldatenEinfuegen.insertTableVerstoss;
@@ -131,7 +136,7 @@ public class VerstossErfassen {
                 // Check ob Element in der Liste
                 boolean noElement = checkElemetInList();
 
-                System.out.println("Ergebnis Check - notInWork: " + notInWork + " und noElement: " + noElement);
+                // System.out.println("Ergebnis Check - notInWork: " + notInWork + " und noElement: " + noElement);
                 // Verarbeitung wenn mind. 1 Feld gefüllt oder noch ein Element in der Liste drin ist
                 if(notInWork == false || noElement == false) {
                     String[] options = {"Ja", "Nein"};
@@ -213,6 +218,13 @@ public class VerstossErfassen {
                 insertPossible = false;
             }
 
+            // Prüfung, ob Element bereits in Datenbank vorhanden ist, falls ja nicht hinzufügen.
+            boolean inDatenbank = checkElementAlreadyInDatenbank(eingabeID);
+            if(inDatenbank == true){
+                JOptionPane.showMessageDialog(null, "Der angegebene Verstoss befindet sich bereits in der Datenbank. Geben Sie einen anderen Verstoss an.", "Datensatz bereits in Datenbank vorhanden", JOptionPane.ERROR_MESSAGE);
+                insertPossible = false;
+            }
+
             if(insertPossible) {
                 // Element der Liste hinzufügen
                 ElementVerstoss verstoss = new ElementVerstoss(eingabeID, eingabeBeschreibung, eingabeStrafe, eingabePunkte, eingabeFahrverbot);
@@ -235,7 +247,7 @@ public class VerstossErfassen {
         if(insertTableVerstoss(VerstossList) == true) {
             JOptionPane.showMessageDialog(null, "Die Datensätze wurden alle erfolgreich erfasst.");
         } else {
-            JOptionPane.showMessageDialog(null, "Es waren doppelte Datensätze vorhanden. Diese wurden nicht erfasst. Der Rest wurde verarbeitet.");
+            JOptionPane.showMessageDialog(null, "Es waren doppelte Datensätze vorhanden. Es wurde nichts verarbeitet. Bitte nochmal von vorne erfassen.");
         }
     }
 
@@ -274,23 +286,23 @@ public class VerstossErfassen {
         Boolean notInWork = true;
         if (!(id.getTextfield().isEmpty())) {
             notInWork = false;
-            //System.out.println("Noch nicht fertig - ID");
+            // System.out.println("Noch nicht fertig - ID");
         }
         if (!(beschreibung.getTextfield().isEmpty())) {
             notInWork = false;
-            //System.out.println("Noch nicht fertig - Beschreibung");
+            // System.out.println("Noch nicht fertig - Beschreibung");
         }
         if (!(strafe.getTextfield().isEmpty())) {
             notInWork = false;
-            //System.out.println("Noch nicht fertig - Strafe");
+            // System.out.println("Noch nicht fertig - Strafe");
         }
         if (!(punkte.getTextfield().isEmpty())) {
             notInWork = false;
-            //System.out.println("Noch nicht fertig - Punkte");
+            // System.out.println("Noch nicht fertig - Punkte");
         }
         if (!(fahrverbot.getTextfield().isEmpty())) {
             notInWork = false;
-            //System.out.println("Noch nicht fertig - Fahrverbot");
+            // System.out.println("Noch nicht fertig - Fahrverbot");
         }
         return notInWork;
     }
@@ -300,7 +312,7 @@ public class VerstossErfassen {
         boolean noElement = true;
         if (anzahlElemente > 0) {
             noElement = false;
-            System.out.println("Wert in Liste vorhanden");
+            // System.out.println("Wert in Liste vorhanden");
         }
         return noElement;
     }
@@ -315,6 +327,33 @@ public class VerstossErfassen {
             }
         }
         return inList;
+    }
+
+    // Prüfung, ob der Wert bereits in der Datenbank vorhanden ist
+    public boolean checkElementAlreadyInDatenbank(Integer id){
+        boolean inDatenbank = false;
+
+        String sqlSelect = "SELECT count(*) FROM Verstoss WHERE VerstossID = ?";
+        try(
+                Connection conn = Datenbankverbindung.connect();
+                PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect);
+        ){
+            pstmtSelect.setInt(1, id);
+            ResultSet resultSelect = pstmtSelect.executeQuery();
+            int result = 1;
+            while (resultSelect.next()) {
+                result = Integer.parseInt(resultSelect.getString(1));
+                // System.out.println(result);
+                if (result == 1) {
+                    inDatenbank = true;
+                }
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return inDatenbank;
     }
 
     // Felder nach erfolgreicher Verarbeitung oder Abbrechen leeren und Fehler entfernen

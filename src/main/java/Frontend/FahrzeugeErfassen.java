@@ -1,11 +1,16 @@
 package Frontend;
 
+import Datenbank.Datenbankverbindung;
 import Datenbank.ElementFahrzeug;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import static Datenbank.BeispieldatenEinfuegen.insertTableFahrzeug;
@@ -206,6 +211,13 @@ public class FahrzeugeErfassen {
                 insertPossible = false;
             }
 
+            // Prüfung, ob Element bereits in Datenbank vorhanden ist, falls ja nicht hinzufügen.
+            boolean inDatenbank = checkElementAlreadyInDatenbank(eingabeKennzeichen);
+            if(inDatenbank == true){
+                JOptionPane.showMessageDialog(null, "Der angegebene Verstoss befindet sich bereits in der Datenbank. Geben Sie einen anderen Verstoss an.", "Datensatz bereits in Datenbank vorhanden", JOptionPane.ERROR_MESSAGE);
+                insertPossible = false;
+            }
+
             if(insertPossible) {
                 // Element der Liste hinzufügen
                 ElementFahrzeug fahrzeug = new ElementFahrzeug(eingabeKennzeichen, eingabeModell, eingabeHersteller, eingabeMotorleistung);
@@ -310,6 +322,33 @@ public class FahrzeugeErfassen {
             }
         }
         return inList;
+    }
+
+    // Prüfung, ob der Wert bereits in der Datenbank vorhanden ist
+    public boolean checkElementAlreadyInDatenbank(String Kennzeichen){
+        boolean inDatenbank = false;
+
+        String sqlSelect = "SELECT count(*) FROM Fahrzeug WHERE Kennzeichen = ?";
+        try(
+                Connection conn = Datenbankverbindung.connect();
+                PreparedStatement pstmtSelect = conn.prepareStatement(sqlSelect);
+        ){
+            pstmtSelect.setString(1, Kennzeichen);
+            ResultSet resultSelect = pstmtSelect.executeQuery();
+            int result = 1;
+            while (resultSelect.next()) {
+                result = Integer.parseInt(resultSelect.getString(1));
+                System.out.println(result);
+                if (result == 1) {
+                    inDatenbank = true;
+                }
+            }
+        } catch (SQLException e){
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return inDatenbank;
     }
 
     // Felder nach erfolgreicher Verarbeitung oder Abbrechen leeren und Fehler entfernen
