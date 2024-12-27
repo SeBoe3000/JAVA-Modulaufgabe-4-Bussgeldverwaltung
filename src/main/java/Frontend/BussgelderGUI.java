@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class BussgelderGUI implements KeyListener {
-    private static final JFrame start = new JFrame("Bussgelder");
+    public static final JFrame start = new JFrame("Bussgelder");
 
     // Transaktion-Buttons
     JButton create_fahrzeug = new JButton("Fahrzeug erfassen");
@@ -18,10 +18,9 @@ public class BussgelderGUI implements KeyListener {
     ButtonGroup create_group = new ButtonGroup();
 
     // Ergebnisse von Abfragen
-    // TODO: Abfragen nach Eingabe neuer Daten aktualisieren
-    JLabel abfrage1 = new JLabel();
-    JLabel abfrage2 = new JLabel();
-    JLabel abfrage3 = new JLabel();
+    static JLabel abfrage1 = new JLabel();
+    static JLabel abfrage2 = new JLabel();
+    static JLabel abfrage3 = new JLabel();
 
 
     private void start() {
@@ -74,7 +73,6 @@ public class BussgelderGUI implements KeyListener {
     }
 
     private void buttonListenerstart() {
-        // TODO: ButtonListener implementieren
         ActionListener fahrzeug_erfassen = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -106,12 +104,11 @@ public class BussgelderGUI implements KeyListener {
         start.setVisible(false);
     }
 
-    public void abfragenUpdaten(){
+    public static void abfragenUpdaten(){
         abfrage1.setText(Abfragen.abfrageHerstellerMeisteVerstoss());
         abfrage2.setText(Abfragen.abfrageTagMeisteVerstoss());
         abfrage3.setText(Abfragen.abfrageFahrzeugMeisteVerstoss());
-        // System.out.println("Ergebnis abfragenUpdate: " + Abfragen.abfrageTagMeisteVerstoss());
-        // System.out.println(abfrage2.getText());
+        // System.out.println("Abfrage2: " + abfrage2.getText() + "Element: " + abfrage2);
     }
 
     public void main() {

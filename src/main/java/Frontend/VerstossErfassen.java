@@ -387,8 +387,9 @@ public class VerstossErfassen {
         // Werte und Fehler in Feldern leeren, sonst sind diese beim nächsten Mal gefüllt
         felderLeeren();
         // Frame start wieder anzeigen
-        BussgelderGUI calc = new BussgelderGUI();
-        calc.main();
+        BussgelderGUI.start.setVisible(true);
+        // Abfragen neu ausführen
+        BussgelderGUI.abfragenUpdaten();
         verstoss.setVisible(false);
     }
 
