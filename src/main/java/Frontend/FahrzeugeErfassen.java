@@ -125,7 +125,7 @@ public class FahrzeugeErfassen {
                 // Check ob Element in der Liste
                 boolean noElement = checkElemetInList();
 
-                System.out.println("Ergebnis Check - notInWork: " + notInWork + " und noElement: " + noElement);
+                // System.out.println("Ergebnis Check - notInWork: " + notInWork + " und noElement: " + noElement);
                 // Verarbeitung wenn mind. 1 Feld gefüllt oder noch ein Element in der Liste drin ist
                 if(notInWork == false || noElement == false) {
                     String[] options = {"Ja", "Nein"};
@@ -191,7 +191,7 @@ public class FahrzeugeErfassen {
             anzahlFelderKorrekt ++;
         }
 
-        //System.out.println("Anzahlkorrekter Felder " + anzahlFelderKorrekt);
+        // System.out.println("Anzahlkorrekter Felder " + anzahlFelderKorrekt);
 
         if(anzahlFelderKorrekt == 4){
             boolean insertPossible = true;
@@ -273,19 +273,19 @@ public class FahrzeugeErfassen {
         Boolean notInWork = true;
         if (!(kennzeichen.getTextfield().isEmpty())) {
             notInWork = false;
-            //System.out.println("Noch nicht fertig - Kennzeichen");
+            // System.out.println("Noch nicht fertig - Kennzeichen");
         }
         if (!(modell.getTextfield().isEmpty())) {
             notInWork = false;
-            //System.out.println("Noch nicht fertig - Modell");
+            // System.out.println("Noch nicht fertig - Modell");
         }
         if (!(hersteller.getTextfield().isEmpty())) {
             notInWork = false;
-            //System.out.println("Noch nicht fertig - Hersteller");
+            // System.out.println("Noch nicht fertig - Hersteller");
         }
         if (!(motorleistung.getTextfield().isEmpty())) {
             notInWork = false;
-            //System.out.println("Noch nicht fertig - Motorleistung");
+            // System.out.println("Noch nicht fertig - Motorleistung");
         }
         return notInWork;
     }
@@ -295,7 +295,7 @@ public class FahrzeugeErfassen {
         boolean noElement = true;
         if (anzahlElemente > 0) {
             noElement = false;
-            System.out.println("Wert in Liste vorhanden");
+            // System.out.println("Wert in Liste vorhanden");
         }
         return noElement;
     }
