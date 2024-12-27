@@ -6,8 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class BussgelderGUI {
+public class BussgelderGUI implements KeyListener {
     private static final JFrame start = new JFrame("Bussgelder");
 
     // Transaktion-Buttons
@@ -20,7 +22,6 @@ public class BussgelderGUI {
     JLabel abfrage1 = new JLabel(Abfragen.abfrageHerstellerMeisteVerstoss());
     JLabel abfrage2 = new JLabel(Abfragen.abfrageTagMeisteVerstoss());
     JLabel abfrage3 = new JLabel(Abfragen.abfrageFahrzeugMeisteVerstoss());
-
 
 
     private void start() {
@@ -61,12 +62,15 @@ public class BussgelderGUI {
         // Größe vom Fenster auf Hälte der Bildschirmgröße in die Mitte setzen
         Dimension dim = new Dimension(1920, 1080);
         dim = Toolkit.getDefaultToolkit().getScreenSize();
-        start.setSize(dim.width/2, dim.height/2);
-        start.setLocation(dim.width/4, dim.height/4);
+        start.setSize(dim.width / 2, dim.height / 2);
+        start.setLocation(dim.width / 4, dim.height / 4);
         // Fenster Schließen, wenn geschlossen
         start.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         // Fenster anzeigen
         start.setVisible(true);
+        // KeyListener hinzufügen
+        start.addKeyListener(this);
+        start.setFocusable(true);
     }
 
     private void buttonListenerstart() {
@@ -74,23 +78,35 @@ public class BussgelderGUI {
         ActionListener fahrzeug_erfassen = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                FahrzeugeErfassen fahrzeug = new FahrzeugeErfassen();
-                fahrzeug.main();
-                start.setVisible(false);
+                fahrzeugErfassen();
             }
-        };create_fahrzeug.addActionListener(fahrzeug_erfassen);
+        };
+        create_fahrzeug.addActionListener(fahrzeug_erfassen);
 
         ActionListener verstoss_erfassen = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                VerstossErfassen verstoss = new VerstossErfassen();
-                verstoss.main();
-                start.setVisible(false);
+                verstossErfassen();
             }
-        };create_verstoss.addActionListener(verstoss_erfassen);
+        };
+        create_verstoss.addActionListener(verstoss_erfassen);
     }
 
-    public void main(){
+    // Fahrzeug erfassen
+    public void fahrzeugErfassen() {
+        FahrzeugeErfassen fahrzeug = new FahrzeugeErfassen();
+        fahrzeug.main();
+        start.setVisible(false);
+    }
+
+    // Verstoss erfassen
+    public void verstossErfassen() {
+        VerstossErfassen verstoss = new VerstossErfassen();
+        verstoss.main();
+        start.setVisible(false);
+    }
+
+    public void main() {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -98,5 +114,27 @@ public class BussgelderGUI {
                 buttonListenerstart();
             }
         });
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        switch (e.getKeyCode()) {
+            case KeyEvent.VK_F: {
+                fahrzeugErfassen();
+                break;
+            }
+            case KeyEvent.VK_V: {
+                verstossErfassen();
+                break;
+            }
+        }
     }
 }
