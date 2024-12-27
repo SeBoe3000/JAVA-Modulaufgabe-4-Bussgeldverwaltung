@@ -15,7 +15,10 @@ public class Tabellenerstellen {
                     "Strafe real NOT NULL," +
                     "Punkte integer NULL," +
                     "Fahrverbot integer NULL," +
-                    "PRIMARY KEY(VerstossID))";
+                    "PRIMARY KEY(VerstossID)," +
+                    "CONSTRAINT check_Strafe CHECK (Strafe > 0)," +
+                    "CONSTRAINT check_Punkte CHECK (Punkte <= 3)," +
+                    "CONSTRAINT check_Fahrverbot CHECK (Fahrverbot <= 3))";
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(query);
         } catch(SQLException e){
@@ -31,7 +34,8 @@ public class Tabellenerstellen {
                     "Modell varchar(30) NOT NULL," +
                     "Hersteller varchar(20) NOT NULL," +
                     "Motorleistung integer NOT NULL," +
-                    "PRIMARY KEY(Kennzeichen))";
+                    "PRIMARY KEY(Kennzeichen)," +
+                    "CONSTRAINT check_Motorleistung CHECK (Motorleistung > 0))";
             Statement stmt = conn.createStatement();
             stmt.executeUpdate(query);
         } catch(SQLException e){
