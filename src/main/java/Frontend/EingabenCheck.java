@@ -73,7 +73,7 @@ public class EingabenCheck {
     public static boolean isValidVergehen(Integer eingabe){
         boolean isValid = true;
 
-        if(eingabe >= 3){
+        if(eingabe > 3){
             isValid = false;
         }
         return isValid;
