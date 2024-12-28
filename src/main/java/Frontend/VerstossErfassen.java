@@ -142,8 +142,9 @@ public class VerstossErfassen {
                     String[] options = {"Ja", "Nein"};
                     int jaNein = JOptionPane.showOptionDialog(null, "Sollen die Änderungen gespeichert werden?",
                             "Speichern?", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-                    if (jaNein == 1){
-                        // Bei Nein, Fenster schließen
+                    //System.out.println(jaNein);
+                    if (jaNein == 1 || jaNein == -1){
+                        // Bei Nein oder X, Fenster schließen
                         backToStart();
                     } else {
                         // Bei Ja Eingabencheck ausführen (nur wenn Felder gefüllt sind)
