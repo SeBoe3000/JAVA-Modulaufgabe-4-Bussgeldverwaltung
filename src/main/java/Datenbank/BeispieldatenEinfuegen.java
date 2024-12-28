@@ -128,8 +128,8 @@ public class BeispieldatenEinfuegen {
         }
     }
 
-    public static void insertTableBussgeld(List<ElementBussgeld> bussgeld){
-        // TODO: umstellen auf Einlesen aus Datei mit SELECT-Statement davor.
+    public static boolean insertTableBussgeld(List<ElementBussgeld> bussgeld){
+        Boolean insert = false;
         String sqlSelect = "SELECT count(*) FROM Bussgeld" +
                 " WHERE Tageszeit = ? AND VerstossID = ? AND Fahrzeug = ?";
         String sqlInsert = "INSERT INTO Bussgeld VALUES(?,?,?,?)";
@@ -161,6 +161,7 @@ public class BeispieldatenEinfuegen {
                     if (++count % batchSize == 0) {
                         pstmtInsert.executeBatch();
                     }
+                    insert = true;
                 }
             }
             pstmtInsert.executeBatch();
@@ -169,6 +170,7 @@ public class BeispieldatenEinfuegen {
         } catch (Exception e){
             e.printStackTrace();
         }
+        return insert;
     }
 
     public static void fillTableall(){

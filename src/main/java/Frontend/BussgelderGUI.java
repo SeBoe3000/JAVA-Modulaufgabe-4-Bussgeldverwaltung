@@ -15,6 +15,7 @@ public class BussgelderGUI implements KeyListener {
     // Transaktion-Buttons
     JButton create_fahrzeug = new JButton("Fahrzeug erfassen");
     JButton create_verstoss = new JButton("Verstoss erfassen");
+    JButton create_bussgeld = new JButton("Bussgeld erfassen");
     ButtonGroup create_group = new ButtonGroup();
 
     // Ergebnisse von Abfragen
@@ -40,11 +41,13 @@ public class BussgelderGUI implements KeyListener {
 
         create_group.add(create_fahrzeug);
         create_group.add(create_verstoss);
+        create_group.add(create_bussgeld);
 
         JPanel create_group = new JPanel();
         create_group.setLayout(new BoxLayout(create_group, BoxLayout.X_AXIS));
         create_group.add(create_fahrzeug);
         create_group.add(create_verstoss);
+        create_group.add(create_bussgeld);
         panel.add(create_group, gbc);
 
         // Abfragen hinzufügen
@@ -88,6 +91,14 @@ public class BussgelderGUI implements KeyListener {
             }
         };
         create_verstoss.addActionListener(verstoss_erfassen);
+
+        ActionListener bussgeld_erfassen = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bussgeldErfassen();
+            }
+        };
+        create_bussgeld.addActionListener(bussgeld_erfassen);
     }
 
     // Fahrzeug erfassen
@@ -101,6 +112,13 @@ public class BussgelderGUI implements KeyListener {
     public void verstossErfassen() {
         VerstossErfassen verstoss = new VerstossErfassen();
         verstoss.main();
+        start.setVisible(false);
+    }
+
+    // Verstoss erfassen
+    public void bussgeldErfassen() {
+        BussgeldErfassen bussgeld = new BussgeldErfassen();
+        bussgeld.main();
         start.setVisible(false);
     }
 
@@ -140,6 +158,10 @@ public class BussgelderGUI implements KeyListener {
             }
             case KeyEvent.VK_V: {
                 verstossErfassen();
+                break;
+            }
+            case KeyEvent.VK_B: {
+                bussgeldErfassen();
                 break;
             }
         }

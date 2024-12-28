@@ -1,6 +1,12 @@
 package Frontend;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -104,8 +110,26 @@ public class EingabenCheck {
         return isValid;
     }
 
-    /* Überprüfung String auf Datum
-    - TODO: Prüfung auf richtiges Datums- / Uhrzeitformat und in Bestandteilt für Prüfung zerlegen
+    /* Überprüfung String auf Datumsformat
+    - Prüfung auf richtiges Datums- / Uhrzeitformat u
+    */
+    public static boolean isValidDatum(String eingabe){
+        boolean isValid = true;
+
+        // Überprüfung auf korrektem Aufbau
+        Pattern pattern = Pattern.compile("(^[0-9]{4}(-[0-9]{2}){2}\\s([0-9]{2}:){2}[0-9]{2}$)");
+        Matcher matcher = pattern.matcher(eingabe);
+        boolean datum = matcher.find();
+
+        if(datum == false) {
+            isValid = false;
+        }
+        return isValid;
+    }
+
+
+    /* Überprüfung String auf gültiges Datum
+    - Datums- / Uhrzeitformat und in Bestandteile für Prüfung zerlegen
     - Prüfung auf Tage nicht größer 31, bei Monat
     - Prüfung auf Monate nicht größer 12
     - Prüfung auf Tage nicht größer 30 bei Monat 04, 06, 09, 11
@@ -116,16 +140,19 @@ public class EingabenCheck {
     - Prüfung auf Sekunden nicht größer 59
     - TODO: Prüfung auf Datum (+ Uhrzeit) nicht in der Zukunft
     */
-    public static boolean isValidDatum(String eingabe){
+    public static boolean isValidDatumCorrect(String eingabe){
         boolean isValid = true;
-        Integer Tag = 0;
-        Integer Monat = 0;
-        Integer Jahr = 0;
-        Integer Stunden = 0;
-        Integer Minuten = 0;
-        Integer Sekunden = 0;
+        // Eingabe in einzelne Bestandteile zerlegen
+        Integer Jahr = Integer.parseInt(eingabe.substring(0,4));
+        Integer Monat = Integer.parseInt(eingabe.substring(5,7));
+        Integer Tag = Integer.parseInt(eingabe.substring(8,10));
+        Integer Stunden = Integer.parseInt(eingabe.substring(11,13));
+        Integer Minuten = Integer.parseInt(eingabe.substring(14,16));
+        Integer Sekunden = Integer.parseInt(eingabe.substring(17,19));
 
-        // in die einzelnen Bestandteile zerlegen
+        System.out.println("Jahr: " + eingabe.substring(0,4) + " Monat: " + eingabe.substring(5,7) + " Tag: " +
+                eingabe.substring(8,10) + " Stunden: " + eingabe.substring(11,13) + " Minuten: " +
+                eingabe.substring(14,16) + " Sekunden: " + eingabe.substring(17,19));
 
         if (Tag > 31 ||
                 Monat > 12 ||
@@ -136,6 +163,23 @@ public class EingabenCheck {
                 (Minuten > 59) ||
                 (Sekunden > 59)
         ) {
+            isValid = false;
+        }
+        return isValid;
+    }
+
+    public static boolean isValidDatumNotInFuture(String eingabe){
+        boolean isValid = true;
+
+        // aktuelles Datum mit Uhrzeitin java Datum umwandeln
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Timestamp sqldate = Timestamp.valueOf(localDateTime);
+
+        Timestamp eingabeTageszeit = Timestamp.valueOf(eingabe);
+
+        System.out.println("sqldate ist: " + sqldate + " eingabe ist: " + eingabeTageszeit);
+
+        if (eingabeTageszeit.after(sqldate)) {
             isValid = false;
         }
 
