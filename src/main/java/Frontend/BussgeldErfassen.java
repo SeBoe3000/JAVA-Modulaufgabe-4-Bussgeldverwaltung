@@ -174,32 +174,30 @@ public class BussgeldErfassen {
         if(checkValues(verstossID, "Integer", "Eine ungültige Verstoss-ID wurde angegeben.")){
             eingabeVerstossID = Integer.parseInt(verstossID.getTextfield());
             anzahlFelderKorrekt ++;
+            // Prüfung, ob VerstossID vorhanden ist
+            boolean inVerstoss = VerstossErfassen.checkElementAlreadyInDatenbank(eingabeVerstossID);
+            if(inVerstoss == false){
+                verstossID.setError();
+                JOptionPane.showMessageDialog(null, "Der angegebene Verstoss ist nicht in der Tabelle Verstoss vorhanden. Bitte geben Sie einen vorhandenen Verstoss an.", "Verstoss nicht vorhanden", JOptionPane.ERROR_MESSAGE);
+                anzahlFelderKorrekt --;
+            } else {
+                verstossID.removeError();
+            }
         }
         if(checkValues(fahrzeug, "isValidString", "Bitte ein Fahrzeug angeben.")
                 && checkValues(fahrzeug, "laenge10", "Die Eingabe vom Fahrzeug ist zu lang.")
                 && checkValues(fahrzeug, "kennzeichen", "Das Fahrzeug entspricht nicht dem richtigen Aufbau.")){
             eingabeFahrzeug = fahrzeug.getTextfield();
             anzahlFelderKorrekt ++;
-        }
-
-        // Prüfung, ob VerstossID vorhanden ist
-        boolean inVerstoss = VerstossErfassen.checkElementAlreadyInDatenbank(eingabeVerstossID);
-        if(inVerstoss == false){
-            verstossID.setError();
-            JOptionPane.showMessageDialog(null, "Der angegebene Verstoss ist nicht in der Tabelle Verstoss vorhanden. Bitte geben Sie einen vorhandenen Verstoss an.", "Verstoss nicht vorhanden", JOptionPane.ERROR_MESSAGE);
-            anzahlFelderKorrekt --;
-        } else {
-            verstossID.removeError();
-        }
-
-        // Prüfung, ob Kennzeichen vorhanden ist.
-        boolean inFahrzeug = FahrzeugeErfassen.checkElementAlreadyInDatenbank(eingabeFahrzeug);
-        if(inFahrzeug == false){
-            fahrzeug.setError();
-            JOptionPane.showMessageDialog(null, "Das angegebene Fahrzeug ist nicht in der Tabelle Fahrzeug vorhanden. Bitte geben Sie ein vorhandenes Fahrzeug an.", "Fahrzeug nicht vorhanden", JOptionPane.ERROR_MESSAGE);
-            anzahlFelderKorrekt --;
-        } else {
-            fahrzeug.removeError();
+            // Prüfung, ob Kennzeichen vorhanden ist.
+            boolean inFahrzeug = FahrzeugeErfassen.checkElementAlreadyInDatenbank(eingabeFahrzeug);
+            if(inFahrzeug == false){
+                fahrzeug.setError();
+                JOptionPane.showMessageDialog(null, "Das angegebene Fahrzeug ist nicht in der Tabelle Fahrzeug vorhanden. Bitte geben Sie ein vorhandenes Fahrzeug an.", "Fahrzeug nicht vorhanden", JOptionPane.ERROR_MESSAGE);
+                anzahlFelderKorrekt --;
+            } else {
+                fahrzeug.removeError();
+            }
         }
 
         // System.out.println("Anzahlkorrekter Felder " + anzahlFelderKorrekt);
