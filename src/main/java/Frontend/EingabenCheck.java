@@ -1,12 +1,8 @@
 package Frontend;
 
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +13,7 @@ public class EingabenCheck {
     - Nur ein Punkt darf vorhanden sein.
     - Mindestens eine Zahl zwischen 1 und 9 muss angegeben sein. (Dadurch Überprüfung auf nicht leerer Wert)
     - Darf nicht Infinity sein
+    - Darf nicht leer sein
      */
     public static boolean isValidFloat(String eingabe){
         boolean isValid = true;
@@ -39,9 +36,13 @@ public class EingabenCheck {
         if (anzahlPunkte > 1 || anzahlZahl == 0){
             isValid = false;
         }
-        // Infinity abfangen
-        Float eingabeZahl = Float.parseFloat(eingabe);
-        if (Float.isInfinite(eingabeZahl)){
+        // Infinity abfangen und dabei leere Eingabe berücksichtigen
+        try {
+            Float eingabeZahl = Float.parseFloat(eingabe);
+            if (Float.isInfinite(eingabeZahl)){
+                isValid = false;
+            }
+        } catch (Exception e) {
             isValid = false;
         }
         return isValid;
