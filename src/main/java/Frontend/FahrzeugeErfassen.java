@@ -325,7 +325,7 @@ public class FahrzeugeErfassen {
     }
 
     // Prüfung, ob der Wert bereits in der Datenbank vorhanden ist
-    public boolean checkElementAlreadyInDatenbank(String Kennzeichen){
+    public static boolean checkElementAlreadyInDatenbank(String Kennzeichen){
         boolean inDatenbank = false;
 
         String sqlSelect = "SELECT count(*) FROM Fahrzeug WHERE Kennzeichen = ?";

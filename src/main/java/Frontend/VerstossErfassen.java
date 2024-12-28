@@ -337,7 +337,7 @@ public class VerstossErfassen {
     }
 
     // Prüfung, ob der Wert bereits in der Datenbank vorhanden ist
-    public boolean checkElementAlreadyInDatenbank(Integer id){
+    public static boolean checkElementAlreadyInDatenbank(Integer id){
         boolean inDatenbank = false;
 
         String sqlSelect = "SELECT count(*) FROM Verstoss WHERE VerstossID = ?";

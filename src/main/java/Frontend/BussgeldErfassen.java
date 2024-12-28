@@ -198,7 +198,25 @@ public class BussgeldErfassen {
             anzahlFelderKorrekt ++;
         }
 
-        // TODO: Kennzeichen und VerstossID müssen vorhanden sein.
+        // Prüfung, ob VerstossID vorhanden ist
+        boolean inVerstoss = VerstossErfassen.checkElementAlreadyInDatenbank(eingabeVerstossID);
+        if(inVerstoss == false){
+            verstossID.setError();
+            JOptionPane.showMessageDialog(null, "Der angegebene Verstoss ist nicht in der Tabelle Verstoss vorhanden. Bitte geben Sie einen vorhandenen Verstoss an.", "Verstoss nicht vorhanden", JOptionPane.ERROR_MESSAGE);
+            anzahlFelderKorrekt --;
+        } else {
+            verstossID.removeError();
+        }
+
+        // Prüfung, ob Kennzeichen vorhanden ist.
+        boolean inFahrzeug = FahrzeugeErfassen.checkElementAlreadyInDatenbank(eingabeFahrzeug);
+        if(inFahrzeug == false){
+            fahrzeug.setError();
+            JOptionPane.showMessageDialog(null, "Das angegebene Fahrzeug ist nicht in der Tabelle Fahrzeug vorhanden. Bitte geben Sie ein vorhandenes Fahrzeug an.", "Fahrzeug nicht vorhanden", JOptionPane.ERROR_MESSAGE);
+            anzahlFelderKorrekt --;
+        } else {
+            fahrzeug.removeError();
+        }
 
         // System.out.println("Anzahlkorrekter Felder " + anzahlFelderKorrekt);
 
