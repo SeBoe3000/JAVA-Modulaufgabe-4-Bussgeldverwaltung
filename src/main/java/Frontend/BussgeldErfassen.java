@@ -14,8 +14,6 @@ import static Datenbank.BeispieldatenEinfuegen.insertTableBussgeld;
 
 public class BussgeldErfassen {
     private static final JFrame bussgeld = new JFrame("Bussgeld erfassen");
-    // ID
-    EingabePanel id = new EingabePanel("ID: ");
     // Tageszeit
     EingabePanel tageszeit = new EingabePanel("Tageszeit: ");
     // VerstossID
@@ -40,24 +38,20 @@ public class BussgeldErfassen {
         GridBagConstraints gbc = new GridBagConstraints();
         panel.setLayout(gridbag);
 
-        // Feld Kennzeichen hinzufügen
+        // Feld Tageszeit hinzufügen
         gbc.gridx = 0; // Spalte
         gbc.gridy = 0; // Zeile
         gbc.weightx = 0.1;
         gbc.weighty = 0.1;
         gbc.fill = GridBagConstraints.CENTER;
-        panel.add(id, gbc);
+        panel.add(tageszeit,gbc);
 
-        // Feld Modell hinzufügen
+        // Feld VerstossID hinzufügen
         gbc.gridy = 1; // Spalte
-        panel.add(tageszeit, gbc);
-
-        // Feld Hersteller hinzufügen
-        gbc.gridy = 2; // Spalte
         panel.add(verstossID, gbc);
 
-        // Feld Motorleistung hinzufügen
-        gbc.gridy = 3; // Spalte
+        // Feld Fahrzeug hinzufügen
+        gbc.gridy = 2; // Spalte
         panel.add(fahrzeug, gbc);
 
         // Transaction Buttons hinzufügen
@@ -71,7 +65,7 @@ public class BussgeldErfassen {
         transaction_panel.add(ok_btn);
         transaction_panel.add(cancel_btn);
 
-        gbc.gridy = 4; // Spalte
+        gbc.gridy = 3; // Spalte
         panel.add(transaction_panel, gbc);
 
         // Panel dem Frame hinzufügen
@@ -164,27 +158,17 @@ public class BussgeldErfassen {
     }
 
     private boolean elementHinzu(){
-        int eingabeID = 0;
         Timestamp eingabeTageszeit = Timestamp.valueOf("1990-11-11 11:11:11");
         int eingabeVerstossID = 0;
         String eingabeFahrzeug = "";
         boolean inWork = true;
         int anzahlFelderKorrekt = 0;
 
-        //System.out.println("Tageszeit: " + tageszeit.getTextfield());
-        //System.out.println("valueOf: " + Timestamp.valueOf(tageszeit.getTextfield()));
-        // 2024-12-28 10:01:05
-
         // Eingaben prüfen und Felder befüllen
-        if(checkValues(id, "Integer", "Eine ungültige ID wurde angegeben.")){
-            eingabeID = Integer.parseInt(id.getTextfield());
-            anzahlFelderKorrekt ++;
-        }
         if(checkValues(tageszeit, "isValidDatum", "Bitte gültiges Datum mit Uhrzeit im Format yyyy-MM-dd HH:mm:ss (yyyy = Jahr, MM = Monat, dd = Tag, HH = Stunde, mm = Minute und ss = Sekunde) angegeben.")
             && checkValues(tageszeit, "isValidDatumCorrect", "Das eingegebene Datum oder die eingegebene Uhrzeit ist ungültig, hat aber das richtige Format.")
             && checkValues(tageszeit, "isValidDatumFuture", "Das eingegebene Datum mit Uhrzeit darf nicht in der Zukunft liegen.")){
             eingabeTageszeit = Timestamp.valueOf(tageszeit.getTextfield());
-
             anzahlFelderKorrekt ++;
         }
         if(checkValues(verstossID, "Integer", "Eine ungültige Verstoss-ID wurde angegeben.")){
@@ -220,7 +204,7 @@ public class BussgeldErfassen {
 
         // System.out.println("Anzahlkorrekter Felder " + anzahlFelderKorrekt);
 
-        if(anzahlFelderKorrekt == 4){
+        if(anzahlFelderKorrekt == 3){
             boolean insertPossible = true;
             // Hier könnte auf einen doppelten Datensatz geprüft werden.
             // Beim Insert erfolgt eine Meldung, ob doppelte Datensätze dabei waren, oder nicht. Daher bleibt hier die Überprüfung aus.
@@ -242,7 +226,7 @@ public class BussgeldErfassen {
 
             if(insertPossible) {
                 // Element der Liste hinzufügen
-                ElementBussgeld bussgeld = new ElementBussgeld(eingabeID, eingabeTageszeit, eingabeVerstossID, eingabeFahrzeug);
+                ElementBussgeld bussgeld = new ElementBussgeld(eingabeTageszeit, eingabeVerstossID, eingabeFahrzeug);
                 BussgeldList.add(bussgeld);
                 anzahlElemente++;
                 // System.out.println("Element Liste hinzufügen" + anzahlElemente);
@@ -307,21 +291,17 @@ public class BussgeldErfassen {
     // Prüfung ob 1 Feld gefüllt ist
     public boolean checkFieldsfilled() {
         Boolean notInWork = true;
-        if (!(id.getTextfield().isEmpty())) {
-            notInWork = false;
-            // System.out.println("Noch nicht fertig - Kennzeichen");
-        }
         if (!(tageszeit.getTextfield().isEmpty())) {
             notInWork = false;
-            // System.out.println("Noch nicht fertig - Modell");
+            // System.out.println("Noch nicht fertig - Tageszeit");
         }
         if (!(verstossID.getTextfield().isEmpty())) {
             notInWork = false;
-            // System.out.println("Noch nicht fertig - Hersteller");
+            // System.out.println("Noch nicht fertig - VerstossID");
         }
         if (!(fahrzeug.getTextfield().isEmpty())) {
             notInWork = false;
-            // System.out.println("Noch nicht fertig - Motorleistung");
+            // System.out.println("Noch nicht fertig - Fahrzeug");
         }
         return notInWork;
     }
@@ -382,12 +362,10 @@ public class BussgeldErfassen {
     // Felder nach erfolgreicher Verarbeitung oder Abbrechen leeren und Fehler entfernen
     private void felderLeeren(){
         // Felder leeren
-        id.setTextField("");
         tageszeit.setTextField("");
         verstossID.setTextField("");
         fahrzeug.setTextField("");
         // Auch einen etwaigen Fehler aus den Feldern entfernen
-        id.removeError();
         tageszeit.removeError();
         verstossID.removeError();
         fahrzeug.removeError();
