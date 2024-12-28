@@ -1,5 +1,6 @@
 package Frontend;
 
+import java.io.File;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -106,7 +107,13 @@ public class EingabenCheck {
         }
         // Kein Drop, Delete, Grant, Revoke oder or mit Leerzeichen davor und danach vorhanden
         boolean injection = false;
-        Pattern pattern = Pattern.compile("([dD][rR][oO][pP]|[dD][eE][lL][eE][tT][eE]|[gG][rR][aA][nN][tT]|[rR][eE][vV][oO][kK][eE]|\\s[oO][rR]\\s)");
+        String os = System.getProperty("os.name");
+        Pattern pattern;
+        if (os.contains("Wind")) {
+            pattern = Pattern.compile("([dD][rR][oO][pP]|[dD][eE][lL][eE][tT][eE]|[gG][rR][aA][nN][tT]|[rR][eE][vV][oO][kK][eE]|\\s[oO][rR]\\s)");
+        } else {
+            pattern = Pattern.compile("([dD][rR][oO][pP]|[dD][eE][lL][eE][tT][eE]|[gG][rR][aA][nN][tT]|[rR][eE][vV][oO][kK][eE]|/s[oO][rR]/s)");
+        }
         Matcher matcher = pattern.matcher(eingabe);
         injection = matcher.find();
         // System.out.println("injection: " + injection);
@@ -124,7 +131,13 @@ public class EingabenCheck {
         boolean isValid = true;
 
         // Überprüfung auf korrektem Aufbau
-        Pattern pattern = Pattern.compile("(^[0-9]{4}(-[0-9]{2}){2}\\s([0-9]{2}:){2}[0-9]{2}$)");
+        String os = System.getProperty("os.name");
+        Pattern pattern;
+        if (os.contains("Wind")) {
+            pattern = Pattern.compile("(^[0-9]{4}(-[0-9]{2}){2}\\s([0-9]{2}:){2}[0-9]{2}$)");
+        } else {
+            pattern = Pattern.compile("(^[0-9]{4}(-[0-9]{2}){2}/s([0-9]{2}:){2}[0-9]{2}$)");
+        }
         Matcher matcher = pattern.matcher(eingabe);
         boolean datum = matcher.find();
 
