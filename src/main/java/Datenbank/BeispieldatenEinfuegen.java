@@ -132,7 +132,7 @@ public class BeispieldatenEinfuegen {
         Boolean insert = false;
         String sqlSelect = "SELECT count(*) FROM Bussgeld" +
                 " WHERE Tageszeit = ? AND VerstossID = ? AND Fahrzeug = ?";
-        String sqlInsert = "INSERT INTO Bussgeld VALUES(?,?,?,?)";
+        String sqlInsert = "INSERT INTO Bussgeld (Tageszeit, VerstossID, Fahrzeug) VALUES(?,?,?)";
         final int batchSize = 5;
         int count = 0;
         try(
@@ -152,10 +152,9 @@ public class BeispieldatenEinfuegen {
                     //System.out.println(result);
                 }
                 if(result == 0) {
-                    pstmtInsert.setInt(1, ElementBussgeld.getID());
-                    pstmtInsert.setTimestamp(2, ElementBussgeld.getTageszeit());
-                    pstmtInsert.setInt(3, ElementBussgeld.getVerstossID());
-                    pstmtInsert.setString(4, ElementBussgeld.getFahrzeug());
+                    pstmtInsert.setTimestamp(1, ElementBussgeld.getTageszeit());
+                    pstmtInsert.setInt(2, ElementBussgeld.getVerstossID());
+                    pstmtInsert.setString(3, ElementBussgeld.getFahrzeug());
 
                     pstmtInsert.addBatch();
                     if (++count % batchSize == 0) {
