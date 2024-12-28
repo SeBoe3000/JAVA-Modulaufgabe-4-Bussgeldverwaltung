@@ -264,10 +264,12 @@ public class VerstossErfassen {
             check1 = EingabenCheck.isValidFloat(check);
         } else if (checkArt == "IntegerKleinerGleich3") {
             check1 = EingabenCheck.isValidInteger(check);
-            Integer checkZahl = Integer.parseInt(check);
-            Boolean check2 = EingabenCheck.isValidVergehen(checkZahl);
-            if (check2 == false) {
-                check1 = false;
+            if(check1) {
+                Integer checkZahl = Integer.parseInt(check);
+                Boolean check2 = EingabenCheck.isValidVergehen(checkZahl);
+                if (check2 == false) {
+                    check1 = false;
+                }
             }
         }
 
