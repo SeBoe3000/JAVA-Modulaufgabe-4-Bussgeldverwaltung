@@ -16,6 +16,7 @@ public class EingabenCheck {
     - Nur Zahlen und Punkte sind zulässige Zeichen
     - Nur ein Punkt darf vorhanden sein.
     - Mindestens eine Zahl zwischen 1 und 9 muss angegeben sein. (Dadurch Überprüfung auf nicht leerer Wert)
+    - Darf nicht Infinity sein
      */
     public static boolean isValidFloat(String eingabe){
         boolean isValid = true;
@@ -36,6 +37,11 @@ public class EingabenCheck {
         }
         //System.out.println("anzahlPunkte " + anzahlPunkte + " anzahlZahl " + anzahlZahl);
         if (anzahlPunkte > 1 || anzahlZahl == 0){
+            isValid = false;
+        }
+        // Infinity abfangen
+        Float eingabeZahl = Float.parseFloat(eingabe);
+        if (Float.isInfinite(eingabeZahl)){
             isValid = false;
         }
         return isValid;
@@ -138,7 +144,6 @@ public class EingabenCheck {
     - Prüfung auf Stunden nicht größer 23
     - Prüfung auf Minuten nicht größer 59
     - Prüfung auf Sekunden nicht größer 59
-    - TODO: Prüfung auf Datum (+ Uhrzeit) nicht in der Zukunft
     */
     public static boolean isValidDatumCorrect(String eingabe){
         boolean isValid = true;
@@ -150,9 +155,10 @@ public class EingabenCheck {
         Integer Minuten = Integer.parseInt(eingabe.substring(14,16));
         Integer Sekunden = Integer.parseInt(eingabe.substring(17,19));
 
-        System.out.println("Jahr: " + eingabe.substring(0,4) + " Monat: " + eingabe.substring(5,7) + " Tag: " +
+        /*System.out.println("Jahr: " + eingabe.substring(0,4) + " Monat: " + eingabe.substring(5,7) + " Tag: " +
                 eingabe.substring(8,10) + " Stunden: " + eingabe.substring(11,13) + " Minuten: " +
                 eingabe.substring(14,16) + " Sekunden: " + eingabe.substring(17,19));
+         */
 
         if (Tag > 31 ||
                 Monat > 12 ||
@@ -168,17 +174,14 @@ public class EingabenCheck {
         return isValid;
     }
 
+    // Überprüfung Datum und Uhrzeit nicht in Zukunft
     public static boolean isValidDatumNotInFuture(String eingabe){
         boolean isValid = true;
-
-        // aktuelles Datum mit Uhrzeitin java Datum umwandeln
+        Timestamp eingabeTageszeit = Timestamp.valueOf(eingabe);
+        // aktuelles Datum mit Uhrzeit in java Datum umwandeln
         LocalDateTime localDateTime = LocalDateTime.now();
         Timestamp sqldate = Timestamp.valueOf(localDateTime);
-
-        Timestamp eingabeTageszeit = Timestamp.valueOf(eingabe);
-
-        System.out.println("sqldate ist: " + sqldate + " eingabe ist: " + eingabeTageszeit);
-
+        // System.out.println("sqldate ist: " + sqldate + " eingabe ist: " + eingabeTageszeit);
         if (eingabeTageszeit.after(sqldate)) {
             isValid = false;
         }
@@ -206,7 +209,7 @@ public class EingabenCheck {
             String part1 = parts[0];
             // System.out.println(part1);
 
-            //TODO: gültige Unterscheidungskennzeichen aus dem Internet laden und in Liste / Datenbank speichern
+            // TODO: gültige Unterscheidungskennzeichen aus dem Internet laden und in Liste / Datenbank speichern
             ArrayList<String> Kennzeichen = new ArrayList<>();
             Kennzeichen.add("A");
             Kennzeichen.add("KA");
@@ -246,5 +249,4 @@ public class EingabenCheck {
         }
         return isValid;
     }
-
 }
