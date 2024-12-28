@@ -18,6 +18,12 @@ public class ElementBussgeld {
         Fahrzeug = fahrzeug;
     }
 
+    public ElementBussgeld(Timestamp tageszeit, Integer verstossID, String fahrzeug) {
+        Tageszeit = tageszeit;
+        VerstossID = verstossID;
+        Fahrzeug = fahrzeug;
+    }
+
     public Integer getID() {
         return ID;
     }
