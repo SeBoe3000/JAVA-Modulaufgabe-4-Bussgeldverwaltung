@@ -1,6 +1,5 @@
 package Frontend;
 
-import java.io.File;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -76,6 +75,36 @@ public class EingabenCheck {
         } catch (Exception e) {
             isValid = false;
             // System.out.println("Zu große Zahl");
+        }
+
+        return isValid;
+    }
+
+    /* Überprüfung String auf gültige Integer, d.h:
+    - Nur Zahlen oder leere Eingabe als zulässige Zeichen
+    - Sofern mind. eine Zahl zwischen 1 und 9 angegeben ist, wird per try versucht zu parsen, falls erfolglos deutet dies auf eine zu große Zahl hin.
+    */
+    public static boolean isValidIntegerNull(String eingabe){
+        boolean isValid = true;
+        Integer anzahlZahl = 0;
+
+        for(int i = 0; i < eingabe.length(); i++){
+            if(!(eingabe.charAt(i) >= '0' && eingabe.charAt(i) <= '9')){
+                isValid = false;
+                break;
+            }
+            if((eingabe.charAt(i) >= '1' && eingabe.charAt(i) <= '9')){
+                anzahlZahl ++;
+            }
+        }
+
+        if (anzahlZahl > 0) {
+            try {
+                Integer eingabeZahl = Integer.parseInt(eingabe);
+            } catch (Exception e) {
+                isValid = false;
+                // System.out.println("Zu große Zahl");
+            }
         }
 
         return isValid;

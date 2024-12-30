@@ -196,11 +196,21 @@ public class VerstossErfassen {
             anzahlFelderKorrekt ++;
         }
         if(checkValues(punkte, "IntegerKleinerGleich3", "Eine ungültige Anzahl an Punkten wurde angegeben.")){
-            eingabePunkte = Integer.parseInt(punkte.getTextfield());
+            // bei keiner Angabe dies in eine 0 umwandeln
+            if(punkte.getTextfield().isEmpty()) {
+                eingabePunkte = 0;
+            } else {
+                eingabePunkte = Integer.parseInt(punkte.getTextfield());
+            }
             anzahlFelderKorrekt ++;
         }
         if(checkValues(fahrverbot, "IntegerKleinerGleich3", "Eine ungültiges Fahrverbot wurde angegeben.")){
-            eingabeFahrverbot = Integer.parseInt(fahrverbot.getTextfield());
+            // bei keiner Angabe dies in eine 0 umwandeln
+            if(fahrverbot.getTextfield().isEmpty()) {
+                eingabeFahrverbot = 0;
+            } else {
+                eingabeFahrverbot = Integer.parseInt(fahrverbot.getTextfield());
+            }
             anzahlFelderKorrekt ++;
         }
 
@@ -264,8 +274,8 @@ public class VerstossErfassen {
         } else if (checkArt == "Float") {
             check1 = EingabenCheck.isValidFloat(check);
         } else if (checkArt == "IntegerKleinerGleich3") {
-            check1 = EingabenCheck.isValidInteger(check);
-            if(check1) {
+            check1 = EingabenCheck.isValidIntegerNull(check);
+            if(check1 && !check.isEmpty()) { // nur prüfen, wenn Eingabe nicht leer ist
                 Integer checkZahl = Integer.parseInt(check);
                 Boolean check2 = EingabenCheck.isValidVergehen(checkZahl);
                 if (check2 == false) {
